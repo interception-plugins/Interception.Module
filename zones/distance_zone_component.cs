@@ -9,7 +9,7 @@ using SDG.Unturned;
 using Steamworks;
 
 namespace interception.zones {
-    public class distance_zone : zone {
+    public class distance_zone_component : zone_component {
 		List<Player> players;
 		DateTime last_upd;
 		float radius;

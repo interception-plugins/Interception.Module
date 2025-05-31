@@ -11,7 +11,7 @@ namespace interception.zones {
     public delegate void on_zone_enter_callback(Player player);
     public delegate void on_zone_exit_callback(Player player);
 
-    public class zone : MonoBehaviour {
+    public class zone_component : MonoBehaviour { // todo rename it to *_zone_component
         public virtual void destroy() {
             Destroy(gameObject);
         }

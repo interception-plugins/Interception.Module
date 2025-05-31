@@ -76,10 +76,10 @@
     <Compile Include="ui\tab.cs" />
     <Compile Include="util\path_util.cs" />
     <Compile Include="ui\window.cs" />
-    <Compile Include="zones\distance_zone.cs" />
-    <Compile Include="zones\box_zone.cs" />
-    <Compile Include="zones\sphere_zone.cs" />
-    <Compile Include="zones\zone.cs" />
+    <Compile Include="zones\distance_zone_component.cs" />
+    <Compile Include="zones\box_zone_component.cs" />
+    <Compile Include="zones\sphere_zone_component.cs" />
+    <Compile Include="zones\zone_component.cs" />
     <Compile Include="zones\zone_manager.cs" />
   </ItemGroup>
   <ItemGroup />
