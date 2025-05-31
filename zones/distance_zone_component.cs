@@ -9,12 +9,12 @@ using SDG.Unturned;
 using Steamworks;
 
 namespace interception.zones {
-    public class distance_zone_component : zone_component {
+	public class distance_zone_component : zone_component {
 		List<Player> players;
 		DateTime last_upd;
 		float radius;
 
-        public on_zone_enter_callback on_zone_enter;
+		public on_zone_enter_callback on_zone_enter;
 		public on_zone_exit_callback on_zone_exit;
 
 		void on_server_disconnected(CSteamID csid) {
@@ -66,7 +66,7 @@ namespace interception.zones {
 						zone_manager.trigger_on_zone_exit_global(Provider.clients[i].player, this);
 					}
 				}
-            }
+			}
 			last_upd = DateTime.UtcNow;
 		}
 	}

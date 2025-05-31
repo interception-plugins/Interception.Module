@@ -9,12 +9,12 @@ using SDG.Unturned;
 using Steamworks;
 
 namespace interception.zones {
-    public class box_zone_component : zone_component {
-        BoxCollider collider;
+	public class box_zone_component : zone_component {
+		BoxCollider collider;
 
 		List<Player> players;
 
-        public on_zone_enter_callback on_zone_enter;
+		public on_zone_enter_callback on_zone_enter;
 		public on_zone_exit_callback on_zone_exit;
 
 		void zone_enter(Player player) {
@@ -36,8 +36,8 @@ namespace interception.zones {
 			gameObject.name = name;
 			gameObject.transform.position = pos;
 			gameObject.layer = 21;
-            collider = gameObject.AddComponent<BoxCollider>();
-            collider.isTrigger = true;
+			collider = gameObject.AddComponent<BoxCollider>();
+			collider.isTrigger = true;
 			collider.size = size;
 
 			players = new List<Player>();

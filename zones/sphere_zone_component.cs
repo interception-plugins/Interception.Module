@@ -9,8 +9,8 @@ using SDG.Unturned;
 using Steamworks;
 
 namespace interception.zones {
-    public class sphere_zone_component : zone_component {
-        SphereCollider collider;
+	public class sphere_zone_component : zone_component {
+		SphereCollider collider;
 
 		List<Player> players;
 
@@ -19,7 +19,7 @@ namespace interception.zones {
 
 		void zone_enter(Player player) {
 			players.Add(player);
-        }
+		}
 
 		void zone_exit(Player player) {
 			players.RemoveAll(x => x.channel.owner.playerID.steamID.m_SteamID == player.channel.owner.playerID.steamID.m_SteamID);
@@ -36,8 +36,8 @@ namespace interception.zones {
 			gameObject.name = name;
 			gameObject.transform.position = pos;
 			gameObject.layer = 21;
-            collider = gameObject.AddComponent<SphereCollider>();
-            collider.isTrigger = true;
+			collider = gameObject.AddComponent<SphereCollider>();
+			collider.isTrigger = true;
 			collider.radius = radius;
 
 			players = new List<Player>();
@@ -49,13 +49,13 @@ namespace interception.zones {
 
 		public override List<Player> get_players() {
 			return players;
-        }
+		}
 
 		void OnTriggerEnter(Collider other) {
 			if (other == null || !other.CompareTag("Player")) return;
 
 			var p = other.gameObject.GetComponent<Player>();
-			
+
 			if (on_zone_enter != null)
 				on_zone_enter(p);
 			zone_manager.trigger_on_zone_enter_global(p, this);
