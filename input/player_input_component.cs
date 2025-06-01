@@ -26,7 +26,7 @@ namespace interception.input {
         void FixedUpdate() {
             var len = last_key_states.Length;
             for (int i = 0; i < len; i++) {
-                if (last_key_states[i] != true != player.input.keys[i]) {
+                if (last_key_states[i] != player.input.keys[i]) {
                     if (!last_key_states[i]) {
                         // todo on_key_down
                         last_key_states[i] = false;
