@@ -16,7 +16,7 @@ namespace interception.input {
 
         public void init(Player player) {
             this.player = player;
-            last_key_states = new bool[15];
+            last_key_states = new bool[input_util.DEFAULT_KEYS + ControlsSettings.NUM_PLUGIN_KEYS];
         }
 
         void OnDestroy() {
@@ -24,7 +24,8 @@ namespace interception.input {
         }
         // im 2 drunk lmao 0_o
         void FixedUpdate() {
-            for (int i = 0; i < input_util.DEFAULT_KEYS + ControlsSettings.NUM_PLUGIN_KEYS; i++) {
+            var len = last_key_states.Length;
+            for (int i = 0; i < len; i++) {
                 if (last_key_states[i] != true != player.input.keys[i]) {
                     if (!last_key_states[i]) {
                         // todo on_key_down
