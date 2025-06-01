@@ -9,11 +9,10 @@ using UnityEngine;
 using SDG.Unturned;
 using Steamworks;
 
-// todo
 namespace interception.zones {
 	public sealed class mesh_zone_component : zone_component {
 		MeshCollider collider;
-		//Collider collider;
+		GameObject child_object;
 
 		List<Player> players;
 
@@ -25,29 +24,26 @@ namespace interception.zones {
 		}
 
 		void zone_exit(Player player) {
-			players.RemoveAll(x => x.channel.owner.playerID.steamID.m_SteamID == player.channel.owner.playerID.steamID.m_SteamID);
+			players.RemoveAll(x => x == null || x.channel.owner.playerID.steamID.m_SteamID == player.channel.owner.playerID.steamID.m_SteamID);
 		}
 
 		void on_server_disconnected(CSteamID csid) {
+			if (players.FindIndex(x => x.channel.owner.playerID.steamID.m_SteamID == csid.m_SteamID) == -1) return;
 			var p = PlayerTool.getPlayer(csid);
 			if (on_zone_exit != null)
 				on_zone_exit(p);
 			zone_manager.trigger_on_zone_exit_global(p, this);
 		}
 
-		void grab_mesh() { // ?
-
-        }
-
 		internal void init(string name, Vector3 pos, float height, int? mask) {
-			throw new NotImplementedException(); // todo remove after i implement this (if possible ofc)
 			gameObject.name = name;
 			//gameObject.transform.position = pos;
 			gameObject.layer = 21;
 
+			
 			RaycastHit hit;
 			var raycast = Physics.Raycast(pos + new Vector3(0f, height, 0f), -Vector3.up, out hit, height * 2f, 
-				mask == null ? /*RayMasks.SMALL | RayMasks.MEDIUM | RayMasks.LARGE | */RayMasks.NAVMESH | RayMasks.CLIP : (int)mask);
+				mask == null ? RayMasks.SMALL | RayMasks.MEDIUM | RayMasks.LARGE | RayMasks.NAVMESH | RayMasks.CLIP : (int)mask);
 			if (!raycast) {
 				destroy();
 				throw new Exception("raycast returned false");
@@ -62,61 +58,46 @@ namespace interception.zones {
 			}
 			gameObject.transform.position = hit.transform.position;
 			gameObject.transform.rotation = hit.transform.rotation;
-			var hit_collider = hit.transform.gameObject.GetComponent<MeshCollider>();
-			if (hit_collider == null)
-				hit_collider = hit.transform.gameObject.GetComponentInChildren<MeshCollider>();
-			if (hit_collider == null) {
+			child_object = Instantiate(hit.transform.gameObject);
+			child_object.transform.parent = gameObject.transform;
+			if (child_object.GetComponent<MeshCollider>() == null && child_object.GetComponentInChildren<MeshCollider>() == null) {
 				destroy();
 				throw new Exception("cannot get mesh collider from raycast hit");
 			}
-			collider = gameObject.AddComponent<MeshCollider>();
-			FieldInfo[] fields = typeof(MeshCollider).GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static);
-			var len = fields.Length;
-			for (int i = 0; i < len; i++) {
-				typeof(MeshCollider).GetField(fields[i].Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Static)
-					.SetValue(collider, fields[i].GetValue(hit_collider));
-			}
-			collider.convex = true;
-			collider.isTrigger = true;
+			child_object.AddComponent<mesh_zone_helper_component>().init();
+
+			collider = child_object.GetComponent<MeshCollider>();
 
 			players = new List<Player>();
 
 			on_zone_enter = zone_enter;
 			on_zone_exit = zone_exit;
 			Provider.onServerDisconnected += on_server_disconnected;
-			Console.WriteLine("done");
-			StartCoroutine(dbg());
 		}
 
-		IEnumerator<WaitForSecondsRealtime> dbg() {
+		public override IEnumerator<WaitForSecondsRealtime> debug_routine() {
 			for (; ; ) {
-				yield return new WaitForSecondsRealtime(0.5f);
-				EffectManager.sendEffect(147, 2048f, collider.bounds.center);
-				float sqr_magniture = -1337f;
-				if (Provider.clients.Count > 0)
-					sqr_magniture = collider.bounds.SqrDistance(Provider.clients[0].player.transform.position);
-				Console.WriteLine($"dbg\ncenter: {collider.bounds.center}\nsize: {collider.bounds.size}\nsqr_magnitude: {sqr_magniture}\nsharedMesh is null: {collider.sharedMesh == null}\n");
+				var len = collider.sharedMesh.vertices.Length;
+				for (int i = 0; i < len; i++) {
+					EffectManager.sendEffect(132, 512f, transform.TransformPoint(collider.sharedMesh.vertices[i]));
+				}
+				EffectManager.sendEffect(133, 512f, child_object.transform.position);
+				yield return new WaitForSecondsRealtime(1f);
 			}
-        }
+		}
 
 		public override List<Player> get_players() {
 			return players;
 		}
 
-		void OnTriggerEnter(Collider other) {
-			Console.WriteLine("enter triggered");
-			if (other == null || !other.CompareTag("Player")) return;
-
+		internal void OnTriggerEnter(Collider other) {
 			var p = other.gameObject.GetComponent<Player>();
 			if (on_zone_enter != null)
 				on_zone_enter(p);
 			zone_manager.trigger_on_zone_enter_global(p, this);
 		}
 
-		void OnTriggerExit(Collider other) {
-			Console.WriteLine("exit triggered");
-			if (other == null || !other.CompareTag("Player")) return;
-
+		internal void OnTriggerExit(Collider other) {
 			var p = other.gameObject.GetComponent<Player>();
 			if (on_zone_exit != null)
 				on_zone_exit(p);

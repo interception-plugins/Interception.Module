@@ -8,7 +8,7 @@ using SDG.Unturned;
 using SDG.NetTransport;
 using UnityEngine;
 
-using interception.util;
+using interception.utils;
 
 namespace interception.ui {
     public class text : control {

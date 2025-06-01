@@ -22,7 +22,7 @@ namespace interception.input {
         void OnDestroy() {
             Console.WriteLine("destroy");
         }
-        // im 2 drunk lmao 0_o
+        
         void FixedUpdate() {
             var len = last_key_states.Length;
             for (int i = 0; i < len; i++) {

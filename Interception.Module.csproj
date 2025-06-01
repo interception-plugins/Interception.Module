@@ -85,11 +85,13 @@
     <Compile Include="ui\image.cs" />
     <Compile Include="ui\text.cs" />
     <Compile Include="ui\tab.cs" />
+    <Compile Include="utils\collider_util.cs" />
     <Compile Include="utils\input_util.cs" />
     <Compile Include="utils\path_util.cs" />
     <Compile Include="ui\window.cs" />
     <Compile Include="zones\distance_zone_component.cs" />
     <Compile Include="zones\box_zone_component.cs" />
+    <Compile Include="zones\mesh_zone_helper_component.cs" />
     <Compile Include="zones\mesh_zone_component.cs" />
     <Compile Include="zones\sphere_zone_component.cs" />
     <Compile Include="zones\zone_component.cs" />

@@ -55,7 +55,7 @@ namespace rocket_test {
                 UnturnedChat.Say(p, "collider == null", Color.magenta);
                 return;
             }
-            UnturnedChat.Say(p, $"collider.isTrigger == {collider.isTrigger}", Color.magenta);
+            UnturnedChat.Say(p, $"collider.isTrigger == {collider.isTrigger}, collider.bounds.size == {collider.bounds.size}", Color.magenta);
             return;
         }
 
@@ -165,6 +165,9 @@ namespace rocket_test {
                 }
                 zone_manager.remove_zone(args[1].ToLower());
             }
+            else if (args[0].ToLower() == "debug") {
+                zone_manager.debug_all_zones();
+            }
             else {
                 UnturnedChat.Say(p, Syntax, Color.red);
                 return;
@@ -173,7 +176,7 @@ namespace rocket_test {
 
         public AllowedCaller AllowedCaller => AllowedCaller.Player;
         public string Name => "zone";
-        public string Syntax => "/zone [create|remove] [name] [type] [radius/size/height]";
+        public string Syntax => "/zone [create|remove|debug] [name] [type] [radius/size/height]";
         public string Help => "null";
         public List<string> Aliases => new List<string>();
         public List<string> Permissions => new List<string>();
