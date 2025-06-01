@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 using SDG.Unturned;
 using UnityEngine;
 
+/* 
+    todo (zone_manager.cs):
+        1. better pool implementation
+*/
+
 namespace interception.zones {
     public delegate void on_zone_enter_global_callback(Player player, zone_component zone);
     public delegate void on_zone_exit_global_callback(Player player, zone_component zone);
@@ -47,10 +52,28 @@ namespace interception.zones {
             return comp;
         }
 
+        public static mesh_zone_component create_mesh(string name, Vector3 pos, float height, int? mask) {
+            if (pool.ContainsKey(name.ToLower()))
+                throw new ArgumentException($"zone with name {name} already exist");
+            GameObject obj = new GameObject();
+            var comp = obj.AddComponent<mesh_zone_component>();
+            // todo back try catch
+            //try {
+            //    comp.init(name.ToLower(), pos, height, mask);
+            //}
+            //catch {
+            //    return null;
+            //}
+            comp.init(name.ToLower(), pos, height, mask);
+            pool.Add(name.ToLower(), obj);
+            return comp;
+        }
+
         public static void remove_zone(string name) {
             if (!pool.ContainsKey(name))
                 throw new ArgumentException($"zone with name {name} does not exist");
             pool[name].GetComponent<zone_component>().destroy();
+            Console.WriteLine(pool.Count);
             pool.Remove(name);
         }
 

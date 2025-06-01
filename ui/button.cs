@@ -8,7 +8,7 @@ using SDG.Unturned;
 using SDG.NetTransport;
 using UnityEngine;
 
-using interception.util;
+using interception.utils;
 
 namespace interception.ui {
     public delegate void on_click_global_callback(short key, string name, ITransportConnection tc); // todo

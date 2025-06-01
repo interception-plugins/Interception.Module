@@ -9,7 +9,7 @@ using SDG.Unturned;
 using Steamworks;
 
 namespace interception.zones {
-	public class box_zone_component : zone_component {
+	public sealed class box_zone_component : zone_component {
 		BoxCollider collider;
 
 		List<Player> players;
@@ -22,10 +22,11 @@ namespace interception.zones {
 		}
 
 		void zone_exit(Player player) {
-			players.RemoveAll(x => x.channel.owner.playerID.steamID.m_SteamID == player.channel.owner.playerID.steamID.m_SteamID);
+			players.RemoveAll(x => x == null || x.channel.owner.playerID.steamID.m_SteamID == player.channel.owner.playerID.steamID.m_SteamID);
 		}
 
 		void on_server_disconnected(CSteamID csid) {
+			if (players.FindIndex(x => x.channel.owner.playerID.steamID.m_SteamID == csid.m_SteamID) == -1) return;
 			var p = PlayerTool.getPlayer(csid);
 			if (on_zone_exit != null)
 				on_zone_exit(p);

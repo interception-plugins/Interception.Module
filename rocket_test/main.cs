@@ -12,6 +12,61 @@ using interception.zones;
 using SDG.Unturned;
 
 namespace rocket_test {
+    internal class cmd_keytest : IRocketCommand {
+        public void Execute(IRocketPlayer caller, string[] args) {
+            UnturnedPlayer p = (UnturnedPlayer)caller;
+            p.Player.ServerShowHint("mamu ebal lol", 5);
+            return;
+        }
+
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
+        public string Name => "keytest";
+        public string Syntax => "/keytest";
+        public string Help => "null";
+        public List<string> Aliases => new List<string>();
+        public List<string> Permissions => new List<string>();
+    }
+
+    internal class cmd_meshshit : IRocketCommand {
+        public void Execute(IRocketPlayer caller, string[] args) {
+            UnturnedPlayer p = (UnturnedPlayer)caller;
+            RaycastHit hit;
+            var cast = Physics.Raycast(p.Player.look.aim.position, p.Player.look.aim.forward, out hit, 2048f,
+                RayMasks.BLOCK_NAVMESH);
+            if (!cast) {
+                UnturnedChat.Say(p, "raycast == false", Color.magenta);
+                return;
+            }
+            if (hit.transform == null) {
+                UnturnedChat.Say(p, "hit.transform == null", Color.magenta);
+                return;
+            }
+            if (hit.transform.gameObject == null) {
+                UnturnedChat.Say(p, "hit.transform.gameObject == null", Color.magenta);
+                return;
+            }
+            UnturnedChat.Say(p, $"hit.transform.gameObject.tag == {hit.transform.gameObject.tag}", Color.magenta);
+            if (hit.collider == null) {
+                UnturnedChat.Say(p, "hit.collider == null", Color.magenta);
+                return;
+            }
+            var collider = hit.collider as MeshCollider;
+            if (collider == null) {
+                UnturnedChat.Say(p, "collider == null", Color.magenta);
+                return;
+            }
+            UnturnedChat.Say(p, $"collider.isTrigger == {collider.isTrigger}", Color.magenta);
+            return;
+        }
+
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
+        public string Name => "meshshit";
+        public string Syntax => "/meshshit";
+        public string Help => "null";
+        public List<string> Aliases => new List<string>();
+        public List<string> Permissions => new List<string>();
+    }
+
     internal class cmd_zone : IRocketCommand {
         public void Execute(IRocketPlayer caller, string[] args) {
             UnturnedPlayer p = (UnturnedPlayer)caller;
@@ -80,6 +135,24 @@ namespace rocket_test {
                         Console.WriteLine($"exit: {_p.channel.owner.playerID.characterName} / {distance.name}");
                     };
                 }
+                else if (args[2].ToLower() == "mesh") {
+                    if (args.Length < 4) {
+                        UnturnedChat.Say(p, Syntax, Color.red);
+                        return;
+                    }
+                    float h;
+                    if (!float.TryParse(args[3], out h)) {
+                        UnturnedChat.Say(p, Syntax, Color.red);
+                        return;
+                    }
+                    var mesh = zone_manager.create_mesh(args[1].ToLower(), p.Position, h, null); // todo?
+                    mesh.on_zone_enter += delegate (Player _p) {
+                        Console.WriteLine($"enter: {_p.channel.owner.playerID.characterName} / {mesh.name}");
+                    };
+                    mesh.on_zone_exit += delegate (Player _p) {
+                        Console.WriteLine($"exit: {_p.channel.owner.playerID.characterName} / {mesh.name}");
+                    };
+                }
                 else {
                     UnturnedChat.Say(p, Syntax, Color.red);
                     return;
@@ -100,7 +173,7 @@ namespace rocket_test {
 
         public AllowedCaller AllowedCaller => AllowedCaller.Player;
         public string Name => "zone";
-        public string Syntax => "/zone [create|remove] [name] [type] [radius/size]";
+        public string Syntax => "/zone [create|remove] [name] [type] [radius/size/height]";
         public string Help => "null";
         public List<string> Aliases => new List<string>();
         public List<string> Permissions => new List<string>();

@@ -66,7 +66,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="database\json_database.cs" />
+    <Compile Include="enums\e_keycode.cs" />
+    <Compile Include="extension\SteamPlayer_ex.cs" />
+    <Compile Include="extension\Player_ex.cs" />
     <Compile Include="game_events.cs" />
+    <Compile Include="input\player_input_component.cs" />
+    <Compile Include="mono\assembly.cs" />
+    <Compile Include="native\todo_some_marshal_shit.cs" />
     <Compile Include="ui\button.cs" />
     <Compile Include="ui\control.cs" />
     <Compile Include="main.cs" />
@@ -74,10 +81,12 @@
     <Compile Include="ui\image.cs" />
     <Compile Include="ui\text.cs" />
     <Compile Include="ui\tab.cs" />
-    <Compile Include="util\path_util.cs" />
+    <Compile Include="utils\input_util.cs" />
+    <Compile Include="utils\path_util.cs" />
     <Compile Include="ui\window.cs" />
     <Compile Include="zones\distance_zone_component.cs" />
     <Compile Include="zones\box_zone_component.cs" />
+    <Compile Include="zones\mesh_zone_component.cs" />
     <Compile Include="zones\sphere_zone_component.cs" />
     <Compile Include="zones\zone_component.cs" />
     <Compile Include="zones\zone_manager.cs" />

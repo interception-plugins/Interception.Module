@@ -9,7 +9,7 @@ using SDG.Unturned;
 using Steamworks;
 
 namespace interception.zones {
-	public class distance_zone_component : zone_component {
+	public sealed class distance_zone_component : zone_component {
 		List<Player> players;
 		DateTime last_upd;
 		float radius;
@@ -18,11 +18,13 @@ namespace interception.zones {
 		public on_zone_exit_callback on_zone_exit;
 
 		void on_server_disconnected(CSteamID csid) {
-			players.RemoveAll(x => x.channel.owner.playerID.steamID.m_SteamID == csid.m_SteamID);
-			var p = PlayerTool.getPlayer(csid);
-			if (on_zone_exit != null)
-				on_zone_exit(p);
-			zone_manager.trigger_on_zone_exit_global(p, this);
+			var c = players.RemoveAll(x => x == null || x.channel.owner.playerID.steamID.m_SteamID == csid.m_SteamID);
+			if (c != 0) {
+				var p = PlayerTool.getPlayer(csid);
+				if (on_zone_exit != null)
+					on_zone_exit(p);
+				zone_manager.trigger_on_zone_exit_global(p, this);
+			}
 		}
 
 		internal void init(string name, Vector3 pos, float radius) {

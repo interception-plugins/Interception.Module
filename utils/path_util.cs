@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using interception.ui;
 
-namespace interception.util {
+namespace interception.utils {
     public static class path_util {
         public static string build_path(params string[] arr) {
             List<string> l = new List<string>();
