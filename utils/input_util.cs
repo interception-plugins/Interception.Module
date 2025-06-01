@@ -27,13 +27,13 @@ namespace interception.utils {
         public static int unmap_plugin_key(e_keycode keycode) {
             if (keycode < e_keycode.comma || keycode >= e_keycode.unknown)
                 throw new Exception("unknown key (did game just updated?)");
-            return (int)keycode - DEFAULT_KEYS;
+            return (int)(keycode - DEFAULT_KEYS);
         }
 
         public static e_keycode map_plugin_key(int index) {
             if (index < 0 || index >= ControlsSettings.NUM_PLUGIN_KEYS || !Enum.IsDefined(typeof(e_keycode), index + DEFAULT_KEYS))
                 throw new Exception("unknown key (did game just updated?)");
-            return (e_keycode)index + DEFAULT_KEYS;
+            return (e_keycode)(index + DEFAULT_KEYS);
         }
     }
 }
