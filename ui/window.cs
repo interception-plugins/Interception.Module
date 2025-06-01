@@ -23,13 +23,13 @@ namespace interception.ui {
         ushort id;
         List<control> _controls;
 
-        bool _is_destroyed;
-        public bool is_destroyed {
+        bool _is_cleared;
+        public bool is_cleared {
             get {
-                return _is_destroyed;
+                return _is_cleared;
             }
             private set {
-                _is_destroyed = value;
+                _is_cleared = value;
             }
         }
 
@@ -55,7 +55,7 @@ namespace interception.ui {
             this.id = id;
             this._key = key;
             this._tc = tc;
-            this._is_destroyed = true;
+            this._is_cleared = true;
             //this._is_hidden = false;
             this._controls = new List<control>();
             on_window_created = delegate (ushort effect_id, short effect_key) { };
@@ -79,11 +79,11 @@ namespace interception.ui {
         }
         */
 
-        public void create() {
-            if (!is_destroyed)
+        public void send() {
+            if (!is_cleared)
                 throw new Exception($"window already created");
             EffectManager.SendUIEffect(Assets.FindEffectAssetByGuidOrLegacyId(Guid.Empty, id), key, tc, true);
-            is_destroyed = false;
+            is_cleared = false;
             if (on_window_created_global != null)
                 on_window_created_global(id, key, tc);
             if (on_window_created != null)
@@ -91,7 +91,7 @@ namespace interception.ui {
         }
 
         public override void show() {
-            if (is_destroyed)
+            if (is_cleared)
                 throw new Exception("cannot show destroyed window");
             EffectManager.sendUIEffectVisibility(key, tc, true, name, true);
             //_is_hidden = false;
@@ -102,7 +102,7 @@ namespace interception.ui {
         }
 
         public override void hide() {
-            if (is_destroyed)
+            if (is_cleared)
                 throw new Exception("cannot hide destroyed window");
             EffectManager.sendUIEffectVisibility(key, tc, true, name, false);
             //_is_hidden = true;
@@ -112,11 +112,11 @@ namespace interception.ui {
                 on_window_hidden(id, key);
         }
 
-        public void destroy() {
-            if (is_destroyed)
+        public void clear() {
+            if (is_cleared)
                 throw new Exception("window already destroyed");
             EffectManager.askEffectClearByID(id, tc);
-            is_destroyed = true;
+            is_cleared = true;
             if (on_window_destroyed_global != null)
                 on_window_destroyed_global(id, key, tc);
             if (on_window_destroyed != null)

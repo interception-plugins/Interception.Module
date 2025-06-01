@@ -12,7 +12,7 @@ namespace interception.utils {
     public static class input_util {
         public const int DEFAULT_KEYS = 10;
         
-        public static int unmap_key(e_keycode keycode) {
+        public static int map_key(e_keycode keycode) {
             if (keycode < 0 || keycode >= e_keycode.unknown)
                 throw new Exception("unknown key (did game just updated?)");
             return (int)keycode;
@@ -24,7 +24,7 @@ namespace interception.utils {
             return (e_keycode)index;
         }
 
-        public static int unmap_plugin_key(e_keycode keycode) {
+        public static int map_plugin_key(e_keycode keycode) {
             if (keycode < e_keycode.comma || keycode >= e_keycode.unknown)
                 throw new Exception("unknown key (did game just updated?)");
             return (int)(keycode - DEFAULT_KEYS);
