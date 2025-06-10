@@ -22,3 +22,5 @@ ui wrapper
 zones plugin
 
 rocket plugins reloader plugin
+
+documentation (ReadTheDocs)
