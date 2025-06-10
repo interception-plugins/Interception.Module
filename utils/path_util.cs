@@ -3,30 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-using interception.ui;
+using System.IO;
 
 namespace interception.utils {
     public static class path_util {
-        public static string build_path(params string[] arr) {
-            List<string> l = new List<string>();
-            var len = arr.Length;
-            for (int i = 0; i < len; i++)
-                if (!string.IsNullOrEmpty(arr[i]) && !string.IsNullOrWhiteSpace(arr[i]))
-                    l.Add(arr[i]);
-            return string.Join("/", l.ToArray());
+        public static string get_rocket_plugin_directory() {
+            return Path.Combine(Directory.GetCurrentDirectory(), $"Plugins/{System.Reflection.Assembly.GetCallingAssembly().GetName().Name}");
         }
 
-        public static string build_path(control head) {
-            List<string> l = new List<string>();
-            int i = 0;
-            while (head != null) {
-                i++;
-                if (!string.IsNullOrEmpty(head.name) && !string.IsNullOrWhiteSpace(head.name))
-                    l.Insert(0, head.name);
-                head = head.parent;
-            }
-            return string.Join("/", l.ToArray());
+        public static string make_rocket_plugin_file_path(string filename) {
+            return Path.Combine(Path.Combine(Directory.GetCurrentDirectory(), $"Plugins/{System.Reflection.Assembly.GetCallingAssembly().GetName().Name}"), filename);
         }
     }
 }

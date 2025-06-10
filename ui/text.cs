@@ -50,17 +50,17 @@ namespace interception.ui {
         */
 
         public override void show() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, path_util.build_path(this), true);
+            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), true);
             //_is_hidden = false;
         }
 
         public override void hide() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, path_util.build_path(this), false);
+            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), false);
             //_is_hidden = true;
         }
 
         public void set_text(string text) {
-            EffectManager.sendUIEffectText(key, tc, true, path_util.build_path(this), _color != null ? $"<color={Palette.hex((Color32)_color)}>{text}</color>" : text);
+            EffectManager.sendUIEffectText(key, tc, true, ui_util.make_path(this), _color != null ? $"<color={Palette.hex((Color32)_color)}>{text}</color>" : text);
             _text = text;
         }
 

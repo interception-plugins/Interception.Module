@@ -14,28 +14,30 @@ namespace interception.zones {
 		MeshCollider collider;
 		GameObject child_object;
 
-		List<Player> players;
+		Dictionary<ulong, Player> players;
 
 		public on_zone_enter_callback on_zone_enter;
 		public on_zone_exit_callback on_zone_exit;
 
 		void zone_enter(Player player) {
-			players.Add(player);
+			if (players.ContainsKey(player.channel.owner.playerID.steamID.m_SteamID)) return;
+			players.Add(player.channel.owner.playerID.steamID.m_SteamID, player);
 		}
 
 		void zone_exit(Player player) {
-			players.RemoveAll(x => x == null || x.channel.owner.playerID.steamID.m_SteamID == player.channel.owner.playerID.steamID.m_SteamID);
+			if (!players.ContainsKey(player.channel.owner.playerID.steamID.m_SteamID)) return;
+			players.Remove(player.channel.owner.playerID.steamID.m_SteamID);
 		}
 
 		void on_server_disconnected(CSteamID csid) {
-			if (players.FindIndex(x => x.channel.owner.playerID.steamID.m_SteamID == csid.m_SteamID) == -1) return;
 			var p = PlayerTool.getPlayer(csid);
+			if (p == null || !players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
 			if (on_zone_exit != null)
 				on_zone_exit(p);
 			zone_manager.trigger_on_zone_exit_global(p, this);
 		}
 
-		internal void init(string name, Vector3 pos, float height, int? mask) {
+		internal void init(string name, Vector3 pos, float height, int? mask, bool destroy_if_failed) {
 			gameObject.name = name;
 			//gameObject.transform.position = pos;
 			gameObject.layer = 21;
@@ -43,17 +45,20 @@ namespace interception.zones {
 			
 			RaycastHit hit;
 			var raycast = Physics.Raycast(pos + new Vector3(0f, height, 0f), -Vector3.up, out hit, height * 2f, 
-				mask == null ? RayMasks.SMALL | RayMasks.MEDIUM | RayMasks.LARGE | RayMasks.NAVMESH | RayMasks.CLIP : (int)mask);
+				mask == null ? RayMasks.SMALL | RayMasks.MEDIUM | RayMasks.LARGE/* | RayMasks.NAVMESH | RayMasks.CLIP*/ : (int)mask);
 			if (!raycast) {
-				destroy();
+				if (destroy_if_failed)
+					Destroy(gameObject);
 				throw new Exception("raycast returned false");
 			}
 			if (hit.transform == null) {
-				destroy();
+				if (destroy_if_failed)
+					Destroy(gameObject);
 				throw new Exception("cannot get transform from raycast hit");
 			}
 			if (hit.transform.gameObject == null) {
-				destroy();
+				if (destroy_if_failed)
+					Destroy(gameObject);
 				throw new Exception("cannot get gameObject from raycast hit");
 			}
 			gameObject.transform.position = hit.transform.position;
@@ -61,21 +66,32 @@ namespace interception.zones {
 			child_object = Instantiate(hit.transform.gameObject);
 			child_object.transform.parent = gameObject.transform;
 			if (child_object.GetComponent<MeshCollider>() == null && child_object.GetComponentInChildren<MeshCollider>() == null) {
-				destroy();
+				if (destroy_if_failed)
+					Destroy(gameObject);
 				throw new Exception("cannot get mesh collider from raycast hit");
 			}
-			child_object.AddComponent<mesh_zone_helper_component>().init();
+			try {
+				child_object.AddComponent<mesh_zone_helper_component>().init();
+			}
+			catch (Exception ex) {
+				if (destroy_if_failed)
+					Destroy(gameObject);
+				throw ex;
+            }
 
 			collider = child_object.GetComponent<MeshCollider>();
 
-			players = new List<Player>();
+			players = new Dictionary<ulong, Player>();
 
 			on_zone_enter = zone_enter;
 			on_zone_exit = zone_exit;
 			Provider.onServerDisconnected += on_server_disconnected;
+			if (zone_manager.debug_mode)
+				enable_debug();
 		}
 
-		public override IEnumerator<WaitForSecondsRealtime> debug_routine() {
+#pragma warning disable CS0618
+		public override IEnumerator<WaitForSecondsRealtime> debug_routine_worker() {
 			for (; ; ) {
 				var len = collider.sharedMesh.vertices.Length;
 				for (int i = 0; i < len; i++) {
@@ -85,10 +101,9 @@ namespace interception.zones {
 				yield return new WaitForSecondsRealtime(1f);
 			}
 		}
+#pragma warning restore CS0618
 
-		public override List<Player> get_players() {
-			return players;
-		}
+		public override List<Player> get_players() => players.Values.ToList();
 
 		internal void OnTriggerEnter(Collider other) {
 			var p = other.gameObject.GetComponent<Player>();
@@ -106,6 +121,8 @@ namespace interception.zones {
 
 		void OnDestroy() {
 			Provider.onServerDisconnected -= on_server_disconnected;
+			on_zone_enter = null;
+			on_zone_exit = null;
 		}
 	}
 }

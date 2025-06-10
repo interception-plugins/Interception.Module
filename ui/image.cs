@@ -32,15 +32,15 @@ namespace interception.ui {
         }
 
         public override void show() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, path_util.build_path(this), true);
+            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), true);
         }
 
         public override void hide() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, path_util.build_path(this), false);
+            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), false);
         }
 
         public void set_url(string url) {
-            EffectManager.sendUIEffectImageURL(key, tc, true, path_util.build_path(this), url);
+            EffectManager.sendUIEffectImageURL(key, tc, true, ui_util.make_path(this), url);
             _url = url;
         }
 

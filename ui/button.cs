@@ -38,11 +38,11 @@ namespace interception.ui {
         }
 
         public override void show() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, path_util.build_path(this), true);
+            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), true);
         }
 
         public override void hide() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, path_util.build_path(this), false);
+            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), false);
         }
 
         public text add_text(string name) {

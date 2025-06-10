@@ -7,11 +7,11 @@ using System.IO;
 
 using Newtonsoft.Json;
 
-namespace interception.database {
-    public class json_database {
+namespace interception.serialization {
+    public class json_file {
         string path;
 
-        public json_database(string path) {
+        public json_file(string path) {
             this.path = path;
         }
 

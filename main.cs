@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 using SDG.Framework.Modules;
 using SDG.Unturned;
@@ -10,7 +11,7 @@ using UnityEngine;
 
 namespace interception {
 	internal class main : IModuleNexus {
-		public GameObject obj;
+		//public GameObject obj;
 
 		public void initialize() {
 			//obj = new GameObject("Interception");
@@ -19,12 +20,13 @@ namespace interception {
 			//	obj.AddComponent<main>();
 			//};
 			game_events.init();
-			CommandWindow.Log("[+] Interception.Module loaded");
+			CommandWindow.Log($"[+] Interception.Module loaded ({Assembly.GetExecutingAssembly().GetName().Version})");
+			
 		}
 
 		public void shutdown() {
 			game_events.uninit();
-			CommandWindow.Log("[-] Interception.Module unloaded (no)");
+			CommandWindow.Log($"[-] Interception.Module unloaded (no)");
 		}
 	}
 }

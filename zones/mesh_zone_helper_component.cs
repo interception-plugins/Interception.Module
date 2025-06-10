@@ -22,11 +22,9 @@ namespace interception.zones {
 			collider = gameObject.GetComponent<MeshCollider>();
 			if (collider == null)
 				collider = gameObject.GetComponentInChildren<MeshCollider>();
-			/*
-			if (collider == null) {
-				throw new Exception("idk"); // todo message
-			}
-			*/
+			if (collider == null)
+				throw new Exception("cannot get any mesh collider component"); 
+			
 			collider.convex = true;
 			collider.isTrigger = true;
 		}

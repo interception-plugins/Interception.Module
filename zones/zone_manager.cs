@@ -7,11 +7,6 @@ using System.Threading.Tasks;
 using SDG.Unturned;
 using UnityEngine;
 
-/* 
-    todo (zone_manager.cs):
-        1. better pool implementation
-*/
-
 namespace interception.zones {
     public delegate void on_zone_enter_global_callback(Player player, zone_component zone);
     public delegate void on_zone_exit_global_callback(Player player, zone_component zone);
@@ -24,13 +19,21 @@ namespace interception.zones {
 
         internal static bool debug_mode = false;
 
+        internal static Dictionary<RegionCoordinate, Dictionary<ulong, Player>> regions_to_check = new Dictionary<RegionCoordinate, Dictionary<ulong, Player>>();
+
         public static sphere_zone_component create_sphere(string name, Vector3 pos, float radius) {
             if (pool.ContainsKey(name.ToLower()))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<sphere_zone_component>();
-            comp.init(name.ToLower(), pos, radius);
-            pool.Add(name.ToLower(), obj);
+            try {
+                comp.init(name.ToLower(), pos, radius);
+                pool.Add(name.ToLower(), obj);
+            }
+            catch {
+                UnityEngine.Object.Destroy(obj);
+                return null;
+            }
             return comp;
         }
 
@@ -39,18 +42,46 @@ namespace interception.zones {
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<box_zone_component>();
-            comp.init(name.ToLower(), pos, size);
-            pool.Add(name.ToLower(), obj);
+            try {
+                comp.init(name.ToLower(), pos, size);
+                pool.Add(name.ToLower(), obj);
+            }
+            catch {
+                UnityEngine.Object.Destroy(obj);
+                return null;
+            }
             return comp;
         }
 
-        public static distance_zone_component create_distance(string name, Vector3 pos, float radius) {
+        public static distance_slow_zone_component create_distance_slow(string name, Vector3 pos, float radius) {
             if (pool.ContainsKey(name.ToLower()))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
-            var comp = obj.AddComponent<distance_zone_component>();
-            comp.init(name.ToLower(), pos, radius);
-            pool.Add(name.ToLower(), obj);
+            var comp = obj.AddComponent<distance_slow_zone_component>();
+            try {
+                comp.init(name.ToLower(), pos, radius);
+                pool.Add(name.ToLower(), obj);
+            }
+            catch (Exception ex) {
+                UnityEngine.Object.Destroy(obj);
+                throw ex;
+            }
+            return comp;
+        }
+
+        public static distance_fast_zone_component create_distance_fast(string name, Vector3 pos, float radius) {
+            if (pool.ContainsKey(name.ToLower()))
+                throw new ArgumentException($"zone with name {name} already exist");
+            GameObject obj = new GameObject();
+            var comp = obj.AddComponent<distance_fast_zone_component>();
+            try {
+                comp.init(name.ToLower(), pos, radius);
+                pool.Add(name.ToLower(), obj);
+            }
+            catch (Exception ex) {
+                UnityEngine.Object.Destroy(obj);
+                throw ex;
+            }
             return comp;
         }
 
@@ -60,21 +91,20 @@ namespace interception.zones {
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<mesh_zone_component>();
             try {
-                comp.init(name.ToLower(), pos, height, mask);
+                comp.init(name.ToLower(), pos, height, mask, false);
+                pool.Add(name.ToLower(), obj);
             }
-            catch {
-                return null;
+            catch (Exception ex) {
+                UnityEngine.Object.Destroy(obj);
+                throw ex;
             }
-            //comp.init(name.ToLower(), pos, height, mask);
-            pool.Add(name.ToLower(), obj);
             return comp;
         }
 
         public static void remove_zone(string name) {
             if (!pool.ContainsKey(name))
                 throw new ArgumentException($"zone with name {name} does not exist");
-            pool[name].GetComponent<zone_component>().destroy();
-            Console.WriteLine(pool.Count);
+            UnityEngine.Object.Destroy(pool[name]);
             pool.Remove(name);
         }
 
@@ -83,14 +113,14 @@ namespace interception.zones {
             if (!debug_mode) {
                 for (int i = 0; i < len; i++) {
                     var comp = pool[pool.ElementAt(i).Key].GetComponent<zone_component>();
-                    comp.StartCoroutine(comp.debug_routine());
+                    comp.enable_debug();
                 }
                 debug_mode = true;
             }
             else {
                 for (int i = 0; i < len; i++) {
                     var comp = pool[pool.ElementAt(i).Key].GetComponent<zone_component>();
-                    comp.StopAllCoroutines();
+                    comp.disable_debug();
                 }
                 debug_mode = false;
             }

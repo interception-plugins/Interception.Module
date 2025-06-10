@@ -12,22 +12,24 @@ namespace interception.zones {
 	public sealed class box_zone_component : zone_component {
 		BoxCollider collider;
 
-		List<Player> players;
+		Dictionary<ulong, Player> players;
 
 		public on_zone_enter_callback on_zone_enter;
 		public on_zone_exit_callback on_zone_exit;
 
 		void zone_enter(Player player) {
-			players.Add(player);
+			if (players.ContainsKey(player.channel.owner.playerID.steamID.m_SteamID)) return;
+			players.Add(player.channel.owner.playerID.steamID.m_SteamID, player);
 		}
 
 		void zone_exit(Player player) {
-			players.RemoveAll(x => x == null || x.channel.owner.playerID.steamID.m_SteamID == player.channel.owner.playerID.steamID.m_SteamID);
+			if (!players.ContainsKey(player.channel.owner.playerID.steamID.m_SteamID)) return;
+			players.Remove(player.channel.owner.playerID.steamID.m_SteamID);
 		}
 
 		void on_server_disconnected(CSteamID csid) {
-			if (players.FindIndex(x => x.channel.owner.playerID.steamID.m_SteamID == csid.m_SteamID) == -1) return;
 			var p = PlayerTool.getPlayer(csid);
+			if (p == null || !players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
 			if (on_zone_exit != null)
 				on_zone_exit(p);
 			zone_manager.trigger_on_zone_exit_global(p, this);
@@ -41,16 +43,16 @@ namespace interception.zones {
 			collider.isTrigger = true;
 			collider.size = size;
 
-			players = new List<Player>();
+			players = new Dictionary<ulong, Player>();
 
 			on_zone_enter = zone_enter;
 			on_zone_exit = zone_exit;
 			Provider.onServerDisconnected += on_server_disconnected;
+			if (zone_manager.debug_mode)
+				enable_debug();
 		}
 
-		public override List<Player> get_players() {
-			return players;
-		}
+		public override List<Player> get_players() => players.Values.ToList();
 
 		void OnTriggerEnter(Collider other) {
 			if (other == null || !other.CompareTag("Player")) return;
@@ -72,6 +74,8 @@ namespace interception.zones {
 
 		void OnDestroy() {
 			Provider.onServerDisconnected -= on_server_disconnected;
+			on_zone_enter = null;
+			on_zone_exit = null;
 		}
 	}
 }
