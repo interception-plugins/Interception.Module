@@ -37,6 +37,9 @@
     <Reference Include="com.rlabrecque.steamworks.net">
       <HintPath>..\..\lib\com.rlabrecque.steamworks.net.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\lib\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SDG.Glazier.Runtime">
       <HintPath>..\..\lib\SDG.Glazier.Runtime.dll</HintPath>
     </Reference>

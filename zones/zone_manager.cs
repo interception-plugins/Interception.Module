@@ -59,14 +59,13 @@ namespace interception.zones {
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<mesh_zone_component>();
-            // todo back try catch
-            //try {
-            //    comp.init(name.ToLower(), pos, height, mask);
-            //}
-            //catch {
-            //    return null;
-            //}
-            comp.init(name.ToLower(), pos, height, mask);
+            try {
+                comp.init(name.ToLower(), pos, height, mask);
+            }
+            catch {
+                return null;
+            }
+            //comp.init(name.ToLower(), pos, height, mask);
             pool.Add(name.ToLower(), obj);
             return comp;
         }

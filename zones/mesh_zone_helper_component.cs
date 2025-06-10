@@ -22,21 +22,21 @@ namespace interception.zones {
 			collider = gameObject.GetComponent<MeshCollider>();
 			if (collider == null)
 				collider = gameObject.GetComponentInChildren<MeshCollider>();
+			/*
 			if (collider == null) {
 				throw new Exception("idk"); // todo message
 			}
+			*/
 			collider.convex = true;
 			collider.isTrigger = true;
 		}
 
 		void OnTriggerEnter(Collider other) {
-			Console.WriteLine("enter triggered");
 			if (other == null || !other.CompareTag("Player")) return;
 			parent_component.OnTriggerEnter(other);
 		}
 
 		void OnTriggerExit(Collider other) {
-			Console.WriteLine("exit triggered");
 			if (other == null || !other.CompareTag("Player")) return;
 			parent_component.OnTriggerExit(other);
 		}
