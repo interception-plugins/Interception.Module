@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 using UnityEngine;
@@ -39,6 +35,10 @@ namespace interception.serialization.types {
 
         public static implicit operator s_quaternion(Quaternion q) {
             return new s_quaternion(q.x, q.y, q.z, q.w);
+        }
+
+        public override string ToString() {
+            return $"({x}, {y}, {z}, {w})";
         }
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 using UnityEngine;
@@ -35,6 +31,10 @@ namespace interception.serialization.types {
 
         public static implicit operator s_vector3(Vector3 v) {
             return new s_vector3(v.x, v.y, v.z);
+        }
+
+        public override string ToString() {
+            return $"({x}, {y}, {z})";
         }
     }
 }

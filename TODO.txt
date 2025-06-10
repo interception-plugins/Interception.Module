@@ -1,0 +1,24 @@
+cron
+	cron_event.cs
+		cron_event<T>(T callback)
+	cron_manager.cs
+
+hooking
+
+mono
+	image.cs
+	assembly.cs
+	appdomain.cs
+	mono.cs
+
+http
+
+discord
+	embed.cs
+	webhook.cs
+
+ui wrapper
+
+zones plugin
+
+rocket plugins reloader plugin

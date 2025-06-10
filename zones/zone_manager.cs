@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using SDG.Unturned;
 using UnityEngine;
@@ -149,7 +147,6 @@ namespace interception.zones {
             return pool[name].GetComponent<zone_component>().get_players();
         }
 
-        // todo throw exception maybe?
         public static zone_component find_zone(string name) {
             if (!pool.ContainsKey(name)) return null;
             return pool[name].GetComponent<zone_component>();

@@ -69,6 +69,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="http\requests.cs" />
+    <Compile Include="mono\assembly.cs" />
     <Compile Include="serialization\types\s_quaternion.cs" />
     <Compile Include="serialization\types\s_vector3.cs" />
     <Compile Include="serialization\json_file.cs" />
@@ -101,6 +103,8 @@
     <Compile Include="zones\zone_component.cs" />
     <Compile Include="zones\zone_manager.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="discord\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
