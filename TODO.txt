@@ -1,4 +1,9 @@
-serialization
+discord
+	move url validation somewhere like url_util.cs
+
+serialization types
+	discord webhooks
+	zones
 
 hooking
 
@@ -10,8 +15,8 @@ mono
 
 ui wrapper
 
-zones plugin
+zones rocket plugin
 
-rocket plugins reloader plugin
+rocket plugins reloader plugin maybe
 
 documentation (ReadTheDocs)
