@@ -1,7 +1,4 @@
-cron
-	cron_event.cs
-		cron_event<T>(T callback)
-	cron_manager.cs
+serialization
 
 hooking
 
@@ -10,12 +7,6 @@ mono
 	assembly.cs
 	appdomain.cs
 	mono.cs
-
-http
-
-discord
-	embed.cs
-	webhook.cs
 
 ui wrapper
 

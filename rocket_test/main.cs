@@ -17,6 +17,12 @@ using interception.utils;
 using interception.serialization;
 using interception.serialization.types;
 using interception.notsafe;
+using interception.cron;
+using interception.discord;
+using interception.discord.types;
+using System.Net;
+using System.IO;
+using System.Globalization;
 
 namespace rocket_test {
     internal class cmd_zone : IRocketCommand {
@@ -224,6 +230,32 @@ namespace rocket_test {
             Console.WriteLine($"messageboxa result = {result}");
             var free = native.free_library(user32);
             Console.WriteLine($"freelibrary result = {free}");
+            cron_manager.register_event(new cron_event("test1", DateTime.Parse("01:21:30"), delegate(object[] obj) {
+                Console.WriteLine($"{(string)obj[0]} / {DateTime.Now.ToString("HH:mm:ss")}");
+            }, "test1"));
+            cron_manager.register_event(new cron_event("test2", DateTime.Parse("01:22:30"), delegate (object[] obj) {
+                Console.WriteLine($"{(string)obj[0]} / {DateTime.Now.ToString("HH:mm:ss")}");
+            }, "test2"));
+            cron_manager.register_event(new cron_event("test3", DateTime.Parse("01:23:00"), delegate (object[] obj) {
+                Console.WriteLine($"{(string)obj[0]} / {DateTime.Now.ToString("HH:mm:ss")}");
+            }, "test3"));
+            cron_manager.register_event(new cron_event("test4", DateTime.Parse("01:23:15"), delegate (object[] obj) {
+                Console.WriteLine($"{(string)obj[0]} / {DateTime.Now.ToString("HH:mm:ss")}");
+            }, "test4"));
+
+            webhook wh = new webhook("test", null, "webhook with file test", e_webhook_flags.silent);
+            var embed = new embed();
+            embed.add_color(Color.magenta);
+            embed.add_title("timestamp test");
+            embed.add_footer(new embed_footer("footer", null));
+            embed.add_timestamp(DateTime.UtcNow.AddHours(-2));
+            wh.add_embed(embed);
+            //Console.WriteLine(wh.serialize_json());
+            wh.add_file("picture.jpg", File.ReadAllBytes(@"C:\Users\speci\Desktop\_OwO\desktop\!pictures_2\5SncO3Ta4Sc.jpg"));
+            //wh.add_file(@"C:\Users\speci\Desktop\_OwO\desktop\!pictures_2\5SncO3Ta4Sc.jpg");
+            DateTime dt = DateTime.UtcNow;
+            webhook_manager.send_webhook_async("https://discord.com/api/webhooks/1382147157167050752/jcmgkgAJfTHFGM2NwID8l6Dm0MMUWPKEizgT1cfQF98D9b_2J74ayBgC97bGVMHp638M", wh);
+            Console.WriteLine((DateTime.UtcNow - dt).TotalMilliseconds);
         }
 
         protected override void Unload() {

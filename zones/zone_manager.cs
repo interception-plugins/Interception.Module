@@ -10,14 +10,14 @@ namespace interception.zones {
     public delegate void on_zone_exit_global_callback(Player player, zone_component zone);
 
     public static class zone_manager {
-        static Dictionary<string, GameObject> pool = new Dictionary<string, GameObject>();
+        static readonly Dictionary<string, GameObject> pool = new Dictionary<string, GameObject>();
 
         public static on_zone_enter_global_callback on_zone_enter_global = delegate (Player player, zone_component zone) { };
         public static on_zone_exit_global_callback on_zone_exit_global = delegate (Player player, zone_component zone) { };
 
         internal static bool debug_mode = false;
 
-        internal static Dictionary<RegionCoordinate, Dictionary<ulong, Player>> regions_to_check = new Dictionary<RegionCoordinate, Dictionary<ulong, Player>>();
+        internal static readonly Dictionary<RegionCoordinate, Dictionary<ulong, Player>> regions_to_check = new Dictionary<RegionCoordinate, Dictionary<ulong, Player>>();
 
         public static sphere_zone_component create_sphere(string name, Vector3 pos, float radius) {
             if (pool.ContainsKey(name.ToLower()))
@@ -134,6 +134,13 @@ namespace interception.zones {
                 on_zone_exit_global(player, zone);
         }
 
+        internal static void clear_zones() {
+            var len = pool.Count;
+            for (int i = 0; i < len; i++)
+                UnityEngine.Object.Destroy(pool.ElementAt(i).Value);
+            pool.Clear();
+        }
+
         public static bool is_player_in_zone(string name, Player player) {
             if (!pool.ContainsKey(name))
                 throw new ArgumentException($"zone with name {name} does not exist");
@@ -145,6 +152,10 @@ namespace interception.zones {
             if (!pool.ContainsKey(name))
                 throw new ArgumentException($"zone with name {name} does not exist");
             return pool[name].GetComponent<zone_component>().get_players();
+        }
+
+        public static bool is_zone_exist(string name) {
+            return pool.ContainsKey(name);
         }
 
         public static zone_component find_zone(string name) {

@@ -26,5 +26,14 @@ namespace interception.input {
             if (on_key_up_global != null)
                 on_key_up_global(player, keycode);
         }
+
+        internal static void remove_component_from_online_players() {
+            var len = Provider.clients.Count;
+            for (int i = 0; i < len; i++) {
+                var comp = Provider.clients[i].player.gameObject.GetComponent<player_input_component>();
+                if (comp != null)
+                    UnityEngine.Object.Destroy(comp);
+            }
+        }
     }
 }

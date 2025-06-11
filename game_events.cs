@@ -10,6 +10,7 @@ using UnityEngine;
 
 using interception.input;
 using interception.zones;
+using interception.time;
 
 namespace interception {
     internal static class game_events {
@@ -55,13 +56,19 @@ namespace interception {
             p.movement.onRegionUpdated -= on_region_updated;
         }
         
+        static void on_post_level_loaded(int level) {
+            main.instance.module_game_object.AddComponent<time_component>();
+        }
+
         public static void init() {
             Provider.onServerConnected += on_server_connected;
             //Player.onPlayerCreated += on_player_created;
             Provider.onServerDisconnected += on_server_disconnected;
+            Level.onPostLevelLoaded += on_post_level_loaded;
         }
 
         public static void uninit() {
+            Level.onPostLevelLoaded -= on_post_level_loaded;
             Provider.onServerDisconnected -= on_server_disconnected;
             //Player.onPlayerCreated -= on_player_created;
             Provider.onServerConnected -= on_server_connected;
