@@ -20,8 +20,6 @@ namespace interception.input {
         public void init(Player player) {
             this.player = player;
             last_key_states = new bool[input_util.DEFAULT_KEYS + ControlsSettings.NUM_PLUGIN_KEYS];
-            on_key_down = delegate (e_keycode _) { };
-            on_key_up = delegate (e_keycode _) { };
         }
 
         void OnDestroy() {

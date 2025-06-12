@@ -22,6 +22,7 @@ namespace interception {
 
         }
 
+        // this triggers 6 times in a row thx nelson
         static void on_region_updated(Player player, byte old_x, byte old_y, byte new_x, byte new_y, byte index, ref bool canIncrementIndex) {
             var old_coords = new RegionCoordinate(old_x, old_y);
             var new_coords = new RegionCoordinate(new_x, new_y);

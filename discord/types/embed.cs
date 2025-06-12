@@ -6,14 +6,12 @@ using Newtonsoft.Json;
 using UnityEngine;
 using SDG.Unturned;
 
-using interception.discord.types;
-
-namespace interception.discord {
+namespace interception.discord.types {
     public class embed {
         int _color;
         public int color => _color;
         [JsonIgnore]
-        public string color_hex => "#" + color.ToString("X2");
+        public string color_hex => "#" + color.ToString("X6");
 
         embed_author _author;
         public embed_author author => _author;
@@ -38,8 +36,8 @@ namespace interception.discord {
         embed_footer _footer;
         public embed_footer footer => _footer;
 
-        DateTime _timestamp;
-        public DateTime timestamp => _timestamp;
+        DateTime? _timestamp;
+        public DateTime? timestamp => _timestamp;
 
         public embed() {
             fields = new List<embed_field>(25);
@@ -54,8 +52,8 @@ namespace interception.discord {
         }
 
         public void add_color(string _color) {
-            if (!_color.StartsWith("#"))
-                throw new ArgumentException("color must be a hex value and start with \"#\"");
+            if (!_color.StartsWith("#") || _color.Length != 7)
+                throw new ArgumentException("color must be a 6 digit hex value and start with \"#\"");
             this._color = int.Parse(_color.Substring(1), NumberStyles.HexNumber);
         }
 
@@ -70,6 +68,8 @@ namespace interception.discord {
         }
 
         public void add_title(string _title) {
+            if (_title.Length > 256)
+                throw new ArgumentOutOfRangeException("title length cannot be more than 256");
             this._title = _title;
         }
 
@@ -80,6 +80,8 @@ namespace interception.discord {
         }
 
         public void add_description(string _description) {
+            if (_description.Length > 4096)
+                throw new ArgumentOutOfRangeException("description length cannot be more than 4096");
             this._description = _description;
         }
 

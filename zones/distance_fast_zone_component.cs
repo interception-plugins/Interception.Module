@@ -38,8 +38,6 @@ namespace interception.zones {
 				if (!zone_manager.regions_to_check.ContainsKey(coords[i]))
 					zone_manager.regions_to_check.Add(coords[i], new Dictionary<ulong, Player>());
 
-			on_zone_enter = delegate (Player _) { };
-			on_zone_exit = delegate (Player _) { };
 			Provider.onServerDisconnected += on_server_disconnected;
 			if (zone_manager.debug_mode)
 				enable_debug();

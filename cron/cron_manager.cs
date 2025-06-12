@@ -13,7 +13,7 @@ namespace interception.cron {
         static readonly Dictionary<string, cron_event> pool = new Dictionary<string, cron_event>();
         static List<cron_event> events => pool.Values.ToList();
 
-        public static on_cron_event_executed_global_callback on_cron_event_executed_global = delegate(cron_event _event) { };
+        public static on_cron_event_executed_global_callback on_cron_event_executed_global;
 
         internal static void trigger_on_cron_event_executed_global(cron_event _event) {
             if (on_cron_event_executed_global != null)
@@ -25,10 +25,11 @@ namespace interception.cron {
         }
 
         internal static void tick() {
-            var len = events.Count;
-            for (int i = 0; i < len; i++) {
-                if (DateTime.UtcNow.ToUniversalTime().ToString("HH:mm:ss") == events[i].execution_time.ToUniversalTime().ToString("HH:mm:ss")) { // todo better comparing
+            for (int i = events.Count - 1; i >= 0; i--) {
+                if (DateTime.UtcNow.ToUniversalTime().ToString("HH:mm:ss") == events[i].execution_time.ToUniversalTime().ToString("HH:mm:ss")) { // todo better comparing maybe
                     events[i].execute();
+                    if (events[i].trigger_once)
+                        unregister_event(events[i].name);
                 }
             }
         }

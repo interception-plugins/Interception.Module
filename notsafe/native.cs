@@ -49,15 +49,19 @@ namespace interception.notsafe {
                 return dlsym(handle, funcname);
         }
 
-        public static T create_func<T>(IntPtr ptr) {
+        public static T make_delegate<T>(IntPtr ptr) {
             return Marshal.GetDelegateForFunctionPointer<T>(ptr);
         }
 
-        public static T create_func<T>(string filename, string funcname, out IntPtr loaded_lib_handle) {
-            loaded_lib_handle = native.load_library(filename);
-            var fn_ptr = native.get_proc_addr(loaded_lib_handle, funcname);
-            var fn = native.create_func<T>(fn_ptr);
+        public static T make_delegate<T>(string filename, string funcname, out IntPtr loaded_lib_handle) {
+            loaded_lib_handle = load_library(filename);
+            var fn_ptr = get_proc_addr(loaded_lib_handle, funcname);
+            var fn = make_delegate<T>(fn_ptr);
             return fn;
+        }
+
+        public static int get_last_error() {
+            return Marshal.GetLastWin32Error(); // not sure if it works on unix system
         }
     }
 }

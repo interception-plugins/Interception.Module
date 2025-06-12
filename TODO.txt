@@ -1,22 +1,7 @@
-discord
-	move url validation somewhere like url_util.cs
-
-serialization types
-	discord webhooks
-	zones
+ui wrapper
 
 hooking
 
-mono
-	image.cs
-	assembly.cs
-	appdomain.cs
-	mono.cs
-
-ui wrapper
-
 zones rocket plugin
-
-rocket plugins reloader plugin maybe
 
 documentation (ReadTheDocs)

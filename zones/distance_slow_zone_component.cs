@@ -31,8 +31,6 @@ namespace interception.zones {
 			last_upd = DateTime.UtcNow;
 			this.radius = radius;
 
-			on_zone_enter = delegate (Player _) { };
-			on_zone_exit = delegate (Player _) { };
 			Provider.onServerDisconnected += on_server_disconnected;
 			if (zone_manager.debug_mode)
 				enable_debug();

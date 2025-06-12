@@ -1,0 +1,11 @@
+{
+	"Name": "Interception.Module",
+	"Version": "1.3.3.7",
+	"Assemblies":
+	[
+		{
+			"Path": "/Interception.Module.dll",
+			"Role": "Server"
+		}
+	]
+}

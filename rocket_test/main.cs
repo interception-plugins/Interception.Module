@@ -20,11 +20,52 @@ using interception.notsafe;
 using interception.cron;
 using interception.discord;
 using interception.discord.types;
+using interception.extensions;
 using System.Net;
 using System.IO;
 using System.Globalization;
+using System.Diagnostics;
 
 namespace rocket_test {
+    internal class cmd_test : IRocketCommand {
+        public void Execute(IRocketPlayer caller, string[] args) {
+            UnturnedPlayer p = (UnturnedPlayer)caller;
+            if (args.Length < 1) {
+                UnturnedChat.Say(p, Syntax, Color.red);
+                return;
+            }
+            chat_util.simulate_message(p.Player, string.Join(" ", args), EChatMode.GLOBAL);
+        }
+
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
+        public string Name => "test";
+        public string Syntax => "/test [message]";
+        public string Help => "null";
+        public List<string> Aliases => new List<string>();
+        public List<string> Permissions => new List<string>();
+    }
+
+    internal class cmd_restart : IRocketCommand {
+        public void Execute(IRocketPlayer caller, string[] args) {
+            UnturnedPlayer p = (UnturnedPlayer)caller;
+            SaveManager.save();
+            for (int i = 0; i < Provider.clients.Count; i++)
+                Provider.kick(Provider.clients[i].get_csteamid(), "server restart");
+            var str = System.Environment.CommandLine;
+            str = str.Remove(0, str.IndexOf(' ') + 1);
+            ProcessStartInfo psi = new ProcessStartInfo(Process.GetCurrentProcess().MainModule.FileName, str);
+            Process.Start(psi);
+            Process.GetCurrentProcess().Kill();
+        }
+
+        public AllowedCaller AllowedCaller => AllowedCaller.Player;
+        public string Name => "restart";
+        public string Syntax => "/restart";
+        public string Help => "null";
+        public List<string> Aliases => new List<string>();
+        public List<string> Permissions => new List<string>();
+    }
+
     internal class cmd_zone : IRocketCommand {
         public void Execute(IRocketPlayer caller, string[] args) {
             UnturnedPlayer p = (UnturnedPlayer)caller;
@@ -48,7 +89,7 @@ namespace rocket_test {
                         return;
                     }
                     //zone_manager.create_sphere(args[1].ToLower(), p.Position, rad);
-                    var sphere = zone_manager.create_sphere(args[1].ToLower(), p.Position, rad);
+                    var sphere = zone_manager.create_sphere_zone(args[1].ToLower(), p.Position, rad);
                     sphere.on_zone_enter += delegate (Player _p) {
                         Console.WriteLine($"enter: {_p.channel.owner.playerID.characterName} / {sphere.name}");
                     };
@@ -67,7 +108,7 @@ namespace rocket_test {
                         return;
                     }
                     //zone_manager.create_box(args[1].ToLower(), p.Position, new Vector3(x, y, z));
-                    var box = zone_manager.create_box(args[1].ToLower(), p.Position, new Vector3(x, y, z));
+                    var box = zone_manager.create_box_zone(args[1].ToLower(), p.Position, p.Player.transform.forward, new Vector3(x, y, z));
                     box.on_zone_enter += delegate (Player _p) {
                         Console.WriteLine($"enter: {_p.channel.owner.playerID.characterName} / {box.name}");
                     };
@@ -85,7 +126,7 @@ namespace rocket_test {
                         UnturnedChat.Say(p, Syntax, Color.red);
                         return;
                     }
-                    var distance_slow = zone_manager.create_distance_slow(args[1].ToLower(), p.Position, rad);
+                    var distance_slow = zone_manager.create_distance_slow_zone(args[1].ToLower(), p.Position, rad);
                     distance_slow.on_zone_enter += delegate (Player _p) {
                         Console.WriteLine($"enter: {_p.channel.owner.playerID.characterName} / {distance_slow.name}");
                     };
@@ -103,7 +144,7 @@ namespace rocket_test {
                         UnturnedChat.Say(p, Syntax, Color.red);
                         return;
                     }
-                    var distance_fast = zone_manager.create_distance_fast(args[1].ToLower(), p.Position, rad);
+                    var distance_fast = zone_manager.create_distance_fast_zone(args[1].ToLower(), p.Position, rad);
                     distance_fast.on_zone_enter += delegate (Player _p) {
                         Console.WriteLine($"enter: {_p.channel.owner.playerID.characterName} / {distance_fast.name}");
                     };
@@ -121,7 +162,7 @@ namespace rocket_test {
                         UnturnedChat.Say(p, Syntax, Color.red);
                         return;
                     }
-                    var mesh = zone_manager.create_mesh(args[1].ToLower(), p.Position, h, null);
+                    var mesh = zone_manager.create_mesh_zone(args[1].ToLower(), p.Position, h, null);
                     mesh.on_zone_enter += delegate (Player _p) {
                         Console.WriteLine($"enter: {_p.channel.owner.playerID.characterName} / {mesh.name}");
                     };
@@ -188,12 +229,14 @@ namespace rocket_test {
     }
 
     public class config : IRocketPluginConfiguration, IDefaultable {
-        public s_vector3 vec3;
-        public s_quaternion quat;
+        public e_keycode key;
+        public xml_dictionary<s_vector3, s_quaternion> dict;
 
         public void LoadDefaults() {
-            vec3 = new Vector3(0f, 1337f, 0f);
-            quat = Quaternion.identity;
+            key = e_keycode.shift0;
+            dict = new Dictionary<s_vector3, s_quaternion>() {
+                { new s_vector3(1337f, 0f, 0f), new s_quaternion() }
+            };
         }
     }
     
@@ -222,26 +265,23 @@ namespace rocket_test {
             input_manager.on_key_up_global += delegate (Player p, e_keycode key) {
                 //Console.WriteLine($"(global) key up: {p.channel.owner.playerID.characterName} / {key.ToString()}");
             };
-            var user32 = native.load_library("user32.dll");
-            Console.WriteLine($"user32 addr = {user32}");
-            var messageboxa = native.get_proc_addr(user32, "MessageBoxA");
-            Console.WriteLine($"messageboxa addr = {messageboxa}");
-            int result = native.create_func<MessageBox>(messageboxa)(IntPtr.Zero, "lol", "OwO", 0);
+            IntPtr user32;
+            int result = native.make_delegate<MessageBox>("user32.dll", "MessageBoxA", out user32)(IntPtr.Zero, "lol", "OwO", 0);
             Console.WriteLine($"messageboxa result = {result}");
             var free = native.free_library(user32);
             Console.WriteLine($"freelibrary result = {free}");
-            cron_manager.register_event(new cron_event("test1", DateTime.Parse("01:21:30"), delegate(object[] obj) {
-                Console.WriteLine($"{(string)obj[0]} / {DateTime.Now.ToString("HH:mm:ss")}");
-            }, "test1"));
-            cron_manager.register_event(new cron_event("test2", DateTime.Parse("01:22:30"), delegate (object[] obj) {
-                Console.WriteLine($"{(string)obj[0]} / {DateTime.Now.ToString("HH:mm:ss")}");
-            }, "test2"));
-            cron_manager.register_event(new cron_event("test3", DateTime.Parse("01:23:00"), delegate (object[] obj) {
-                Console.WriteLine($"{(string)obj[0]} / {DateTime.Now.ToString("HH:mm:ss")}");
-            }, "test3"));
-            cron_manager.register_event(new cron_event("test4", DateTime.Parse("01:23:15"), delegate (object[] obj) {
-                Console.WriteLine($"{(string)obj[0]} / {DateTime.Now.ToString("HH:mm:ss")}");
-            }, "test4"));
+            cron_manager.register_event(new cron_event("test1", DateTime.Parse("12:32:00"), false, delegate(object[] args) { Console.WriteLine(cron_manager.is_event_exist("test3")); }));
+            cron_manager.register_event(new cron_event("test2", DateTime.Parse("12:31:00"), false, delegate (object[] args) { Console.WriteLine((string)args[0]); }, "test2"));
+            cron_manager.register_event(new cron_event("test3", DateTime.Parse("12:31:00"), true, delegate (object[] args) { Console.WriteLine((string)args[0]); }, "test3"));
+            cron_manager.register_event(new cron_event("test4", DateTime.Parse("12:32:30"), false, delegate (object[] args) { Console.WriteLine(cron_manager.is_event_exist("test4")); }));
+            webhook wh = new webhook(null, null, null, e_webhook_flag.silent);
+            var embed = new embed();
+            embed.add_color(Color.blue);
+            embed.add_title("embed");
+            embed.add_description("OwO");
+            embed.add_footer(new embed_footer("footer", null));
+            embed.add_timestamp(DateTime.UtcNow.AddHours(-2));
+            wh.add_embed(embed);
         }
 
         protected override void Unload() {

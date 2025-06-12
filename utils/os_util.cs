@@ -7,7 +7,7 @@ namespace interception.utils {
             return (p == 4) || (p == 6) || (p == 128);
         }
 
-        public static bool is_64bit() {
+        public static bool is_64bit_process() {
             return IntPtr.Size == 8;
         }
     }

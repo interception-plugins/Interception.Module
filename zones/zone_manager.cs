@@ -12,14 +12,14 @@ namespace interception.zones {
     public static class zone_manager {
         static readonly Dictionary<string, GameObject> pool = new Dictionary<string, GameObject>();
 
-        public static on_zone_enter_global_callback on_zone_enter_global = delegate (Player player, zone_component zone) { };
-        public static on_zone_exit_global_callback on_zone_exit_global = delegate (Player player, zone_component zone) { };
+        public static on_zone_enter_global_callback on_zone_enter_global;
+        public static on_zone_exit_global_callback on_zone_exit_global;
 
         internal static bool debug_mode = false;
 
         internal static readonly Dictionary<RegionCoordinate, Dictionary<ulong, Player>> regions_to_check = new Dictionary<RegionCoordinate, Dictionary<ulong, Player>>();
 
-        public static sphere_zone_component create_sphere(string name, Vector3 pos, float radius) {
+        public static sphere_zone_component create_sphere_zone(string name, Vector3 pos, float radius) {
             if (pool.ContainsKey(name.ToLower()))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
@@ -35,13 +35,13 @@ namespace interception.zones {
             return comp;
         }
 
-        public static box_zone_component create_box(string name, Vector3 pos, Vector3 size) {
+        public static box_zone_component create_box_zone(string name, Vector3 pos, Vector3 forward, Vector3 size) {
             if (pool.ContainsKey(name.ToLower()))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<box_zone_component>();
             try {
-                comp.init(name.ToLower(), pos, size);
+                comp.init(name.ToLower(), pos, forward, size);
                 pool.Add(name.ToLower(), obj);
             }
             catch {
@@ -51,7 +51,7 @@ namespace interception.zones {
             return comp;
         }
 
-        public static distance_slow_zone_component create_distance_slow(string name, Vector3 pos, float radius) {
+        public static distance_slow_zone_component create_distance_slow_zone(string name, Vector3 pos, float radius) {
             if (pool.ContainsKey(name.ToLower()))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
@@ -67,7 +67,7 @@ namespace interception.zones {
             return comp;
         }
 
-        public static distance_fast_zone_component create_distance_fast(string name, Vector3 pos, float radius) {
+        public static distance_fast_zone_component create_distance_fast_zone(string name, Vector3 pos, float radius) {
             if (pool.ContainsKey(name.ToLower()))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
@@ -83,7 +83,7 @@ namespace interception.zones {
             return comp;
         }
 
-        public static mesh_zone_component create_mesh(string name, Vector3 pos, float height, int? mask) {
+        public static mesh_zone_component create_mesh_zone(string name, Vector3 pos, float height, int? mask) {
             if (pool.ContainsKey(name.ToLower()))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();

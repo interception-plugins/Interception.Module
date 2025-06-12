@@ -20,7 +20,6 @@ namespace interception {
 			UnityEngine.Object.DontDestroyOnLoad(module_game_object);
 			game_events.init();
 			CommandWindow.Log($"[+] Interception.Module loaded ({Assembly.GetExecutingAssembly().GetName().Version})");
-			
 		}
 
 		public void shutdown() {

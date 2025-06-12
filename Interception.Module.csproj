@@ -75,17 +75,35 @@
   <ItemGroup>
     <Compile Include="cron\cron_event.cs" />
     <Compile Include="cron\cron_manager.cs" />
-    <Compile Include="discord\embed.cs" />
+    <Compile Include="discord\types\embed.cs" />
     <Compile Include="discord\types\embed_footer.cs" />
     <Compile Include="discord\types\embed_field.cs" />
     <Compile Include="discord\types\embed_author.cs" />
     <Compile Include="discord\types\embed_thumbnail.cs" />
     <Compile Include="discord\types\embed_image.cs" />
-    <Compile Include="discord\webhook.cs" />
+    <Compile Include="discord\types\file_attachement.cs" />
+    <Compile Include="discord\types\webhook.cs" />
     <Compile Include="discord\webhook_manager.cs" />
-    <Compile Include="enums\e_webhook_flags.cs" />
-    <Compile Include="mono\assembly.cs" />
+    <Compile Include="enums\e_file_attachement_type.cs" />
+    <Compile Include="enums\e_webhook_flag.cs" />
+    <Compile Include="enums\e_zone_type.cs" />
+    <Compile Include="extension\Color32.ex.cs" />
+    <Compile Include="extension\Color_ex.cs" />
+    <Compile Include="extension\Type_ex.cs" />
+    <Compile Include="serialization\types\discord\s_embed.cs" />
+    <Compile Include="serialization\types\discord\s_embed_thumbnail.cs" />
+    <Compile Include="serialization\types\discord\s_embed_image.cs" />
+    <Compile Include="serialization\types\discord\s_embed_footer.cs" />
+    <Compile Include="serialization\types\discord\s_embed_field.cs" />
+    <Compile Include="serialization\types\discord\s_embed_author.cs" />
+    <Compile Include="serialization\types\discord\s_file_attachement.cs" />
+    <Compile Include="serialization\types\discord\s_webhook.cs" />
+    <Compile Include="serialization\types\xml_dictionary.cs" />
+    <Compile Include="serialization\types\xml_pair.cs" />
+    <Compile Include="serialization\types\s_color32.cs" />
+    <Compile Include="serialization\types\s_color.cs" />
     <Compile Include="serialization\types\s_quaternion.cs" />
+    <Compile Include="serialization\types\s_vector2.cs" />
     <Compile Include="serialization\types\s_vector3.cs" />
     <Compile Include="serialization\json_file.cs" />
     <Compile Include="enums\e_keycode.cs" />
@@ -95,6 +113,13 @@
     <Compile Include="input\input_manager.cs" />
     <Compile Include="input\player_input_component.cs" />
     <Compile Include="notsafe\native.cs" />
+    <Compile Include="serialization\types\zones\s_distance_fast_zone.cs" />
+    <Compile Include="serialization\types\zones\s_distance_slow_zone.cs" />
+    <Compile Include="serialization\types\zones\s_box_zone.cs" />
+    <Compile Include="serialization\types\zones\s_mesh_zone.cs" />
+    <Compile Include="serialization\types\zones\s_sphere_zone.cs" />
+    <Compile Include="serialization\types\zones\s_zone.cs" />
+    <Compile Include="server\restart_component.cs" />
     <Compile Include="time\time_component.cs" />
     <Compile Include="time\time_manager.cs" />
     <Compile Include="ui\button.cs" />
@@ -104,6 +129,8 @@
     <Compile Include="ui\image.cs" />
     <Compile Include="ui\text.cs" />
     <Compile Include="ui\tab.cs" />
+    <Compile Include="server\restart_manager.cs" />
+    <Compile Include="utils\chat_util.cs" />
     <Compile Include="utils\collider_util.cs" />
     <Compile Include="utils\input_util.cs" />
     <Compile Include="utils\os_util.cs" />
@@ -122,4 +149,8 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(ProjectDir)Interception.Module.module $(ProjectDir)$(OutDir)
+copy $(ProjectDir)English.dat $(ProjectDir)$(OutDir)</PostBuildEvent>
+  </PropertyGroup>
 </Project>

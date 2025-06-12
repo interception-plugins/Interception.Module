@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace interception.serialization.types {
     [Serializable]
+    [XmlType("vector3")]
     public class s_vector3 {
         [XmlAttribute]
         public float x { get; set; }

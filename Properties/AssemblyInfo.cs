@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("vk.com/interceptionplugins")]
 [assembly: AssemblyProduct("Interception.Module")]
-[assembly: AssemblyCopyright("Copyright © Interception Plugins 2025")]
+[assembly: AssemblyCopyright("Copyright © 2025, Interception Plugins")]
 [assembly: AssemblyTrademark("vk.com/valvedeveloper")]
 [assembly: AssemblyCulture("")]
 

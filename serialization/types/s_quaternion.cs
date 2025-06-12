@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace interception.serialization.types {
     [Serializable]
+    [XmlType("quaternion")]
     public class s_quaternion {
         [XmlAttribute]
         public float x { get; set; }
