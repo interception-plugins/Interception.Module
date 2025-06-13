@@ -14,7 +14,7 @@ namespace interception.discord.types {
 
         public embed_author(string name, string url, string icon_url) {
             if (name.Length > 256)
-                throw new ArgumentOutOfRangeException("author.name length cannot be more than 256");
+                throw new ArgumentOutOfRangeException("author.name length must be less or equal 256");
             this.name = name;
             if (url != null && !url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException($"passed parameter is not a url (\"{url}\")");

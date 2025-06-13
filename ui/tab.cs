@@ -1,67 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using SDG.Unturned;
 using SDG.NetTransport;
 
 namespace interception.ui {
-    public class tab : control {
-        short _key;
-        protected override short key => _key;
-        ITransportConnection _tc;
-        protected override ITransportConnection tc => _tc;
-        string _name;
-        public override string name => _name;
-        //bool _is_hidden;
-        //public override bool is_visible => !_is_hidden;
+    public sealed class tab : control {
         control _parent;
         public override control parent => _parent;
+        short _key;
+        public override short key => _key;
+        ITransportConnection _tc;
+        internal override ITransportConnection tc => _tc;
+        string _name;
+        public override string name => _name;
+        string _path;
+        public override string path => _path;
+        bool _is_visible;
+        public override bool is_visible => _is_visible;
+        window root;
 
-        List<control> _controls;
-
-        public tab(control parent, short key, ITransportConnection tc, string name) {
-            this._parent = parent;
-            this._key = key;
-            this._tc = tc;
-            this._name = name;
-            //this._is_hidden = false;
-            this._controls = new List<control>();
+        public tab(control _parent, short _key, ITransportConnection _tc, string _name, bool _visible_by_default = true) : base() {
+            this._parent = _parent;
+            this._key = _key;
+            this._tc = _tc;
+            this._name = _name;
+            this._path = make_path();
+            this._is_visible = _visible_by_default;
+            this.root = get_root_window();
         }
 
-        /*
-        public tab(control parent, short key, ITransportConnection tc, string name, bool hidden_by_default) {
-            this._parent = parent;
-            this._key = key;
-            this._tc = tc;
-            this._name = name;
-            this._is_hidden = hidden_by_default;
-            this._controls = new List<control>();
-        }
-        */
-
-        public override void show() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, name, true);
-            //_is_hidden = false;
+        public override void show(bool reliable = true) {
+            if (!root.is_spawned)
+                throw new Exception("root window is despawned");
+            EffectManager.sendUIEffectVisibility(key, tc, reliable, name, true);
+            _is_visible = true;
         }
 
-        public override void hide() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, name, false);
-            //_is_hidden = true;
+        public override void hide(bool reliable = true) {
+            if (!root.is_spawned)
+                throw new Exception("root window is despawned");
+            EffectManager.sendUIEffectVisibility(key, tc, reliable, name, false);
+            _is_visible = false;
         }
 
         public tab add_tab(string name) {
-            tab ctrl = new tab(this, key, tc, name);
-            _controls.Add(ctrl);
-            return (tab)_controls.Last();
+            return new tab(this, key, tc, name);
         }
 
         public text add_text(string name) {
-            text ctrl = new text(this, key, tc, name);
-            _controls.Add(ctrl);
-            return (text)_controls.Last();
+            return new text(this, key, tc, name);
+        }
+
+        public image add_image(string name) {
+            return new image(this, key, tc, name);
         }
     }
 }

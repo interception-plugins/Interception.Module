@@ -11,20 +11,15 @@ namespace interception.zones {
     public delegate void on_zone_exit_callback(Player player);
 
     public class zone_component : MonoBehaviour {
-        Coroutine debug_routine;
+        protected Coroutine debug_routine;
 
         //public virtual void destroy() {
         //    Destroy(gameObject);
         //}
 
 #pragma warning disable CS0618
-        public virtual IEnumerator<WaitForSecondsRealtime> debug_routine_worker() {
+        protected virtual IEnumerator<WaitForSecondsRealtime> debug_routine_worker() {
             for (; ; ) {
-                var a = collider_util.get_collider_vertex_positions(gameObject);
-                var len = a.Length;
-                for (int i = 0; i < len; i++) {
-                    EffectManager.sendEffect(132, 512f, a[i]);
-                }
                 EffectManager.sendEffect(133, 512f, gameObject.transform.position);
                 yield return new WaitForSecondsRealtime(1f);
             }
@@ -42,6 +37,7 @@ namespace interception.zones {
             debug_routine = null;
         }
 
+        //protected Dictionary<ulong, Player> players = new Dictionary<ulong, Player>();
         public virtual List<Player> get_players() { return null; }
     }
 }

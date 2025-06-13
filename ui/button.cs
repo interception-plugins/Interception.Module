@@ -1,60 +1,64 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using SDG.Unturned;
 using SDG.NetTransport;
-using UnityEngine;
-
-using interception.utils;
 
 namespace interception.ui {
-    public delegate void on_click_global_callback(short key, string name, ITransportConnection tc); // todo
-    public delegate void on_click_callback(short key, string name);
+    public delegate void on_click_callback();
 
-    public class button : control {
-        short _key;
-        protected override short key => _key;
-        ITransportConnection _tc;
-        protected override ITransportConnection tc => _tc;
-        string _name;
-        public override string name => _name;
+    public sealed class button : control {
         control _parent;
         public override control parent => _parent;
-
-        List<control> _controls;
+        short _key;
+        public override short key => _key;
+        ITransportConnection _tc;
+        internal override ITransportConnection tc => _tc;
+        string _name;
+        public override string name => _name;
+        string _path;
+        public override string path => _path;
+        bool _is_visible;
+        public override bool is_visible => _is_visible;
+        window root;
 
         public on_click_callback on_click;
 
-        public button(control parent, short key, ITransportConnection tc, string name) {
-            this._parent = parent;
-            this._key = key;
-            this._tc = tc;
-            this._name = name;
-            this._controls = new List<control>();
-            this.on_click = delegate (short effect_key, string button_name) { };
+        public button(control _parent, short _key, ITransportConnection _tc, string _name, bool _visible_by_default = true) {
+            this._parent = _parent;
+            this._key = _key;
+            this._tc = _tc;
+            this._name = _name;
+            this._path = make_path();
+            this._is_visible = _visible_by_default;
+            this.root = get_root_window();
+            ui_manager.add_control(this);
         }
 
-        public override void show() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), true);
+        public override void show(bool reliable = true) {
+            if (!root.is_spawned)
+                throw new Exception("root window is despawned");
+            EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
+            _is_visible = true;
         }
 
-        public override void hide() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), false);
+        public override void hide(bool reliable = true) {
+            if (!root.is_spawned)
+                throw new Exception("root window is despawned");
+            EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
+            _is_visible = false;
+        }
+
+        internal void click() {
+            if (on_click != null)
+                on_click();
         }
 
         public text add_text(string name) {
-            text ctrl = new text(this, key, tc, name);
-            _controls.Add(ctrl);
-            return (text)_controls.Last();
+            return new text(this, key, tc, name);
         }
 
         public image add_image(string name) {
-            image ctrl = new image(this, key, tc, name);
-            _controls.Add(ctrl);
-            return (image)_controls.Last();
+            return new image(this, key, tc, name);
         }
     }
 }

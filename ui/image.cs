@@ -1,51 +1,75 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using SDG.Unturned;
 using SDG.NetTransport;
-using UnityEngine;
-
-using interception.utils;
 
 namespace interception.ui {
-    public class image : control {
-        short _key;
-        protected override short key => _key;
-        ITransportConnection _tc;
-        protected override ITransportConnection tc => _tc;
-        string _name;
-        public override string name => _name;
+    public sealed class image : control {
         control _parent;
         public override control parent => _parent;
-
+        short _key;
+        public override short key => _key;
+        ITransportConnection _tc;
+        internal override ITransportConnection tc => _tc;
+        string _name;
+        public override string name => _name;
+        string _path;
+        public override string path => _path;
+        bool _is_visible;
+        public override bool is_visible => _is_visible;
         string _url;
+        window root;
 
-        public image(control parent, short key, ITransportConnection tc, string name) {
-            this._parent = parent;
-            this._key = key;
-            this._tc = tc;
-            this._name = name;
+        public image(control _parent, short _key, ITransportConnection _tc, string _name, bool _visible_by_default = true) : base() {
+            this._parent = _parent;
+            this._key = _key;
+            this._tc = _tc;
+            this._name = _name;
+            this._path = make_path();
+            this._is_visible = _visible_by_default;
             this._url = string.Empty;
+            this.root = get_root_window();
+            if (root != null) {
+                root.internal_on_window_spawned += on_spawn;
+                root.internal_on_window_despawned += on_despawn;
+            }
         }
 
-        public override void show() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), true);
+        public override void show(bool reliable = true) {
+            if (!root.is_spawned)
+                throw new Exception("root window is despawned");
+            EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
+            _is_visible = true;
         }
 
-        public override void hide() {
-            EffectManager.sendUIEffectVisibility(key, tc, true, ui_util.make_path(this), false);
+        public override void hide(bool reliable = true) {
+            if (!root.is_spawned)
+                throw new Exception("root window is despawned");
+            EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
+            _is_visible = false;
         }
 
-        public void set_url(string url) {
-            EffectManager.sendUIEffectImageURL(key, tc, true, ui_util.make_path(this), url);
-            _url = url;
+        //public void set_image(string _url, bool reliable = true) {
+        //    EffectManager.sendUIEffectImageURL(key, tc, reliable, path, _url);
+        //}
+        
+        public void set_url(string _url) {
+            if (!root.is_spawned)
+                throw new Exception("root window is despawned");
+            EffectManager.sendUIEffectImageURL(key, tc, true, path, _url);
+            this._url = _url;
         }
 
         public string get_url() {
             return _url;
+        }
+
+        protected override void on_spawn() {
+            _url = string.Empty;
+        }
+
+        protected override void on_despawn() {
+            _url = string.Empty;
         }
     }
 }

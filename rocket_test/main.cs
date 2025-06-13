@@ -25,8 +25,11 @@ using System.Net;
 using System.IO;
 using System.Globalization;
 using System.Diagnostics;
+using SDG.NetTransport;
 
 namespace rocket_test {
+    
+    
     internal class cmd_test : IRocketCommand {
         public void Execute(IRocketPlayer caller, string[] args) {
             UnturnedPlayer p = (UnturnedPlayer)caller;
@@ -35,6 +38,9 @@ namespace rocket_test {
                 return;
             }
             chat_util.simulate_message(p.Player, string.Join(" ", args), EChatMode.GLOBAL);
+            Console.WriteLine(main.tcs.ContainsKey(p.Player.channel.owner.transportConnection));
+            Console.WriteLine(main.tcs[p.Player.channel.owner.transportConnection]);
+            Console.WriteLine(main.tcs.Count);
         }
 
         public AllowedCaller AllowedCaller => AllowedCaller.Player;
@@ -244,8 +250,10 @@ namespace rocket_test {
         json_file db_file;
         db_type db = new db_type();
         delegate int MessageBox(IntPtr handle, string c, string t, uint lol);
+        public static Dictionary<ITransportConnection, string> tcs = new Dictionary<ITransportConnection, string>();
 
         protected override void Load() {
+            U.Events.OnPlayerConnected += delegate (UnturnedPlayer p) { tcs.Add(p.Player.channel.owner.transportConnection, "goida!"); };
             zone_manager.on_zone_enter_global += delegate (Player p, zone_component z) {
                 Console.WriteLine($"(global) enter: {p.channel.owner.playerID.characterName} / {z.name}");
             };

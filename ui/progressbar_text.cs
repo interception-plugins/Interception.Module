@@ -1,10 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 using SDG.Unturned;
 using SDG.NetTransport;
+using UnityEngine;
+
+using interception.utils;
 
 namespace interception.ui {
-    public sealed class text : control {
+    public delegate void on_progress_changed_callback(int old_value, int new_value);
+
+    public sealed class progressbar_text : control {
         control _parent;
         public override control parent => _parent;
         short _key;
@@ -17,19 +26,22 @@ namespace interception.ui {
         public override string path => _path;
         bool _is_visible;
         public override bool is_visible => _is_visible;
-        string _text;
-        //Color? color;
+        int max_chars, progress;
+        char fill_char;
         window root;
 
-        public text(control _parent, short _key, ITransportConnection _tc, string _name, bool _visible_by_default = true) : base() {
+        public on_progress_changed_callback on_progress_changed;
+
+        public progressbar_text(control _parent, short _key, ITransportConnection _tc, string _name, int max_chars, char fill_char, bool _visible_by_default = true) : base() {
             this._parent = _parent;
             this._key = _key;
             this._tc = _tc;
             this._name = _name;
+            this.max_chars = max_chars;
+            this.fill_char = fill_char;
             this._path = make_path();
             this._is_visible = _visible_by_default;
-            this._text = string.Empty;
-            //this.color = null;
+            this.progress = 0;
             this.root = get_root_window();
             if (root != null) {
                 root.internal_on_window_spawned += on_spawn;
@@ -51,50 +63,42 @@ namespace interception.ui {
             _is_visible = false;
         }
 
-        public void set_text(string _text, bool reliable = true) {
+        public void set_progress(int progress, bool reliable = true) {
             if (!root.is_spawned)
                 throw new Exception("root window is despawned");
-            EffectManager.sendUIEffectText(key, tc, reliable, path, _text);
-            //EffectManager.sendUIEffectText(key, tc, true, path, color != null ? $"<color={Palette.hex((Color32)_color)}>{_text}</color>" : _text);
-            this._text = _text;
+            int old = this.progress;
+            this.progress = math_util.clamp(progress, 0, max_chars);
+            EffectManager.sendUIEffectText(key, tc, reliable, path, new string(fill_char, this.progress));
+            if (on_progress_changed != null)
+                on_progress_changed(old, this.progress);
         }
 
-        public string get_text() {
-            return _text;
+        public void increase_by(int val, bool reliable = true) {
+            set_progress(progress += val, reliable);
+        }
+
+        public void decrease_by(int val, bool reliable = true) {
+            set_progress(progress -= val, reliable);
+        }
+
+        public void increment(bool reliable = true) {
+            set_progress(++progress, reliable);
+        }
+
+        public void decrement(bool reliable = true) {
+            set_progress(--progress, reliable);
+        }
+
+        public int get_progress() {
+            return progress;
         }
 
         protected override void on_spawn() {
-            _text = string.Empty;
+            progress = 0;
         }
 
         protected override void on_despawn() {
-            _text = string.Empty;
+            progress = 0;
         }
-
-        /*
-        public void set_text_color(Color? color) {
-            this.color = color;
-            set_text(_text);
-        }
-
-        public void set_text_color(Color32? color) {
-            this.color = (Color)color;
-            set_text(_text);
-        }
-
-        public void set_text_color(string color) {
-            if (color == null) {
-                this._color = null;
-                set_text(_text);
-                return;
-            }
-            this._color = (Color)Palette.hex(color);
-            set_text(_text);
-        }
-
-        public void add_rich_text_param(string key, string value) {
-            
-        }
-        */
     }
 }

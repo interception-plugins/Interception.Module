@@ -7,7 +7,7 @@ namespace interception.zones {
 		MeshCollider collider;
 		mesh_zone_component parent_component;
 
-		internal void init() {
+		public void init() {
 			parent_component = gameObject.transform.parent.gameObject.GetComponent<mesh_zone_component>();
 			//gameObject.name = name;
 			gameObject.layer = 21;

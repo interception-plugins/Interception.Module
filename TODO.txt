@@ -1,7 +1,10 @@
-ui wrapper
+zones
+	move players dict to base class
 
-hooking
+todo maybe some final renaming
 
 zones rocket plugin
+
+hooking
 
 documentation (ReadTheDocs)

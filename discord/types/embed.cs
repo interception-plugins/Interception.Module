@@ -69,7 +69,7 @@ namespace interception.discord.types {
 
         public void add_title(string _title) {
             if (_title.Length > 256)
-                throw new ArgumentOutOfRangeException("title length cannot be more than 256");
+                throw new ArgumentOutOfRangeException("title length must be less or equal 256");
             this._title = _title;
         }
 
@@ -81,7 +81,7 @@ namespace interception.discord.types {
 
         public void add_description(string _description) {
             if (_description.Length > 4096)
-                throw new ArgumentOutOfRangeException("description length cannot be more than 4096");
+                throw new ArgumentOutOfRangeException("description length must be less or equal 4096");
             this._description = _description;
         }
 

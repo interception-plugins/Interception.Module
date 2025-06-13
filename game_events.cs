@@ -11,15 +11,16 @@ using UnityEngine;
 using interception.input;
 using interception.zones;
 using interception.time;
+using interception.ui;
 
 namespace interception {
     internal static class game_events {
-        static void on_effect_button_clicked() {
-
+        static void on_effect_button_clicked(Player p, string b) {
+            ui_manager.on_effect_button_clicked(p.channel.owner.transportConnection, b);
         }
 
-        static void on_effect_input_commited() {
-
+        static void on_effect_input_commited(Player p, string b, string t) {
+            ui_manager.on_effect_text_commited(p.channel.owner.transportConnection, b, t);
         }
 
         // this triggers 6 times in a row thx nelson
@@ -40,6 +41,7 @@ namespace interception {
             if (p == null) return;
             p.gameObject.AddComponent<player_input_component>().init(p);
             p.movement.onRegionUpdated += on_region_updated;
+            ui_manager.add_player(p.channel.owner.transportConnection);
         }
 
         //static void on_player_created(Player p) {
@@ -55,6 +57,7 @@ namespace interception {
                 if (zone_manager.regions_to_check[coords].ContainsKey(p.channel.owner.playerID.steamID.m_SteamID))
                     zone_manager.regions_to_check[coords].Remove(p.channel.owner.playerID.steamID.m_SteamID);
             p.movement.onRegionUpdated -= on_region_updated;
+            ui_manager.remove_player(p.channel.owner.transportConnection);
         }
         
         static void on_post_level_loaded(int level) {
@@ -66,9 +69,13 @@ namespace interception {
             //Player.onPlayerCreated += on_player_created;
             Provider.onServerDisconnected += on_server_disconnected;
             Level.onPostLevelLoaded += on_post_level_loaded;
+            EffectManager.onEffectButtonClicked += on_effect_button_clicked;
+            EffectManager.onEffectTextCommitted += on_effect_input_commited;
         }
 
         public static void uninit() {
+            EffectManager.onEffectTextCommitted -= on_effect_input_commited;
+            EffectManager.onEffectButtonClicked -= on_effect_button_clicked;
             Level.onPostLevelLoaded -= on_post_level_loaded;
             Provider.onServerDisconnected -= on_server_disconnected;
             //Player.onPlayerCreated -= on_player_created;

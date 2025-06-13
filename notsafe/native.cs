@@ -56,7 +56,7 @@ namespace interception.notsafe {
         public static T make_delegate<T>(string filename, string funcname, out IntPtr loaded_lib_handle) {
             loaded_lib_handle = load_library(filename);
             var fn_ptr = get_proc_addr(loaded_lib_handle, funcname);
-            var fn = make_delegate<T>(fn_ptr);
+            var fn = Marshal.GetDelegateForFunctionPointer<T>(fn_ptr);
             return fn;
         }
 

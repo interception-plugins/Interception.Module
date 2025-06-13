@@ -21,9 +21,12 @@ namespace interception.zones {
 			if (on_zone_exit != null)
 				on_zone_exit(p);
 			zone_manager.trigger_on_zone_exit_global(p, this);
+			players.Remove(p.channel.owner.playerID.steamID.m_SteamID);
+			if (zone_manager.debug_mode)
+				Console.WriteLine($"zone exit ({gameObject.name}): {p.channel.owner.playerID.characterName}");
 		}
 
-		internal void init(string name, Vector3 pos, float radius) {
+		public void init(string name, Vector3 pos, float radius) {
 			gameObject.name = name;
 			gameObject.transform.position = pos;
 			gameObject.layer = 21;
@@ -41,7 +44,7 @@ namespace interception.zones {
 		public override List<Player> get_players() => players.Values.ToList();
 
 #pragma warning disable CS0618
-		public override IEnumerator<WaitForSecondsRealtime> debug_routine_worker() {
+		protected override IEnumerator<WaitForSecondsRealtime> debug_routine_worker() {
 			for (; ; ) {
 				for (int i = 360; i > 0; i -= 90) {
 					float x = gameObject.transform.position.x + collider.radius * (float)Math.Cos(i * (Math.PI / 180));
@@ -68,6 +71,8 @@ namespace interception.zones {
 
 			if (players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
 			players.Add(p.channel.owner.playerID.steamID.m_SteamID, p);
+			if (zone_manager.debug_mode)
+				Console.WriteLine($"zone enter ({gameObject.name}): {p.channel.owner.playerID.characterName}");
 		}
 
 		void OnTriggerExit(Collider other) {
@@ -80,6 +85,8 @@ namespace interception.zones {
 
 			if (!players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
 			players.Remove(p.channel.owner.playerID.steamID.m_SteamID);
+			if (zone_manager.debug_mode)
+				Console.WriteLine($"zone exit ({gameObject.name}): {p.channel.owner.playerID.characterName}");
 		}
 
 		void OnDestroy() {

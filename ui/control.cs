@@ -1,20 +1,63 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using SDG.NetTransport;
 
 namespace interception.ui {
     public abstract class control {
         public abstract control parent { get; }
-        protected abstract short key { get; }
-        protected abstract ITransportConnection tc { get; }
+        public abstract short key { get; }
+        internal abstract ITransportConnection tc { get; }
         public abstract string name { get; }
-        // todo
-        //public abstract bool is_visible { get; }
-        public abstract void show();
-        public abstract void hide();
+        public abstract string path { get; }
+        public abstract bool is_visible { get; }
+        protected virtual bool visible_by_default { get; }
+        public abstract void show(bool reliable);
+        public abstract void hide(bool reliable);
+        protected virtual void on_spawn() { }
+        protected virtual void on_despawn() { }
+
+        //protected List<control> controls;
+
+        protected virtual string make_path() {
+            var head = this;
+            List<string> l = new List<string>();
+            while (head != null) {
+                if (!string.IsNullOrEmpty(head.name) && !string.IsNullOrWhiteSpace(head.name))
+                    l.Insert(0, head.name);
+                head = head.parent;
+            }
+            return string.Join("/", l.ToArray());
+        }
+
+        protected window get_root_window() {
+            if (this is window)
+                return (window)this;
+            var head = this;
+            while (head != null) {
+                head = head.parent;
+                if (head is window)
+                    return (window)head;
+            }
+            throw new Exception($"somehow parent window for control {path} was not found 0_o");
+        }
+
+        /*
+        protected window get_parent_window() {
+            if (this is window) 
+                return (window)this;
+            var head = this;
+            while (head != null) {
+                head = head.parent;
+                if (head is window)
+                    return (window)head;
+            }
+            throw new Exception($"somehow parent window for control {path} was not found 0_o");
+        }
+        */
+
+        public control() {
+            //controls = new List<control>();
+        }
     }
 }

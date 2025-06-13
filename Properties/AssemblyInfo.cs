@@ -8,10 +8,10 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Interception.Module")]
 [assembly: AssemblyDescription("if you're reading this, you have been in a coma for the past 20 years. i don't know where this message will end up in your dream, but i hope it works. please wake up.")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("vk.com/interceptionplugins")]
+[assembly: AssemblyCompany("https://github.com/interception-plugins")]
 [assembly: AssemblyProduct("Interception.Module")]
 [assembly: AssemblyCopyright("Copyright © 2025, Interception Plugins")]
-[assembly: AssemblyTrademark("vk.com/valvedeveloper")]
+[assembly: AssemblyTrademark("https://vk.com/interceptionplugins")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
