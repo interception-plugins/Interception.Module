@@ -21,6 +21,7 @@ using interception.cron;
 using interception.discord;
 using interception.discord.types;
 using interception.extensions;
+using interception.ui;
 using System.Net;
 using System.IO;
 using System.Globalization;
@@ -28,7 +29,102 @@ using System.Diagnostics;
 using SDG.NetTransport;
 
 namespace rocket_test {
-    
+    public class ui_test_component : UnturnedPlayerComponent {
+        ITransportConnection tc;
+        int i = 0;
+        window canvas;
+        tab main_tab;
+        text test_text;
+        image test_bg;
+        button test_button0;
+        button test_button1;
+        button test_button2;
+        progressbar_text test_progress_bar_image_text;
+        tab test_tab;
+        button test_button5;
+        textbox test_input_field;
+        text test_input_field_dup_text;
+        button test_button6;
+        button test_button7;
+
+        protected override void Load() {
+            tc = base.Player.Player.channel.owner.transportConnection;
+            canvas = new window(31915, 1337, tc);
+            canvas.on_spawned += delegate () {
+                Console.WriteLine("window spawned");
+            };
+            canvas.on_despawned += delegate () {
+                Console.WriteLine("window despawned");
+            };
+            main_tab = canvas.add_tab("main");
+            test_text = main_tab.add_text("test_text");
+            test_bg = main_tab.add_image("test_bg");
+            test_button0 = main_tab.add_button("test_button0");
+            test_button0.on_click += delegate () {
+                switch (i) {
+                    case 0:
+                        test_bg.set_image("https://media.discordapp.net/attachments/1297303869088600166/1382287218504110163/mBBSxlWeSDU.jpg?ex=684d3dca&is=684bec4a&hm=5531bba36a1987d0b4771f0cc66a803aa7a7cd7eca8b35b00ef042e93e26f784&=&format=webp&width=795&height=801");
+                        i++;
+                        break;
+                    case 1:
+                        test_bg.set_image("https://sun9-1.userapi.com/impg/-lFuy_XZsBKTFCYfKS21RC9t3h48w6R7fv--ZQ/hyvsHQwlKB4.jpg?size=1430x1079&quality=95&sign=be61d839faa5b43dd10d161321c4d379&type=album");
+                        i++;
+                        break;
+                    case 2:
+                        test_bg.set_image("https://media.discordapp.net/attachments/1297303869088600166/1382287219645091840/1FffDJjjK54.jpg?ex=684d3dca&is=684bec4a&hm=12760389a16b018fefc767742f08bcc9173474e5bda674c56164360e5df54739&=&format=webp&width=362&height=327");
+                        i++;
+                        break;
+                    case 3:
+                        test_bg.set_image("https://media.discordapp.net/attachments/1297303869088600166/1382287220261519391/t7tMSk-ucGQ.jpg?ex=684d3dca&is=684bec4a&hm=740ce155b8af9fc54d495f7d44a06894d3f22b3b649cdbd854dc6b54a4f6b188&=&format=webp&width=1053&height=932");
+                        i++;
+                        break;
+                    default:
+                        i = 0;
+                        break;
+                }
+            };
+            test_button1 = main_tab.add_button("test_button1");
+            test_button1.on_click += delegate () {
+                test_progress_bar_image_text.increment();
+            };
+            test_button2 = main_tab.add_button("test_button2");
+            test_button2.on_click += delegate () {
+                test_progress_bar_image_text.decrement();
+            };
+            test_progress_bar_image_text = main_tab.add_progressbar("Image/Image/test_progress_bar_image_text", 31, 'W');
+
+            test_tab = main_tab.add_tab("test_tab");
+            test_button5 = test_tab.add_button("test_button5");
+            test_button5.on_click += delegate () {
+                test_input_field.set_text(string.Empty);
+            };
+            test_input_field = test_tab.add_textbox("test_input_field");
+            test_input_field.on_text_changed += delegate (string oldval, string newval) {
+                test_input_field_dup_text.set_text(newval);
+            };
+            test_input_field_dup_text = test_tab.add_text("test_input_field_dup_text");
+            test_button6 = main_tab.add_button("test_button6");
+            test_button6.on_hidden += delegate () {
+                Console.WriteLine("test_button6 is hidden now");
+            };
+            test_button6.on_click += delegate () {
+                test_button6.hide();
+            };
+            test_button7 = main_tab.add_button("test_button7");
+            test_button7.on_click += delegate () {
+                canvas.despawn();
+                ui_util.disable_cursor(base.Player.Player);
+                ui_util.disable_blur(base.Player.Player);
+            };
+        }
+
+        public void enable_ui() {
+            canvas.spawn();
+            ui_util.enable_cursor(base.Player.Player);
+            ui_util.enable_blur(base.Player.Player);
+            test_text.set_text($"this text was changed by a plugin: {System.Reflection.Assembly.GetExecutingAssembly().FullName}");
+        }
+    }
     
     internal class cmd_test : IRocketCommand {
         public void Execute(IRocketPlayer caller, string[] args) {
@@ -38,9 +134,8 @@ namespace rocket_test {
                 return;
             }
             chat_util.simulate_message(p.Player, string.Join(" ", args), EChatMode.GLOBAL);
-            Console.WriteLine(main.tcs.ContainsKey(p.Player.channel.owner.transportConnection));
-            Console.WriteLine(main.tcs[p.Player.channel.owner.transportConnection]);
-            Console.WriteLine(main.tcs.Count);
+            p.GetComponent<ui_test_component>().enable_ui();
+            Console.WriteLine(ui_manager.get_pool_count());
         }
 
         public AllowedCaller AllowedCaller => AllowedCaller.Player;
@@ -250,10 +345,8 @@ namespace rocket_test {
         json_file db_file;
         db_type db = new db_type();
         delegate int MessageBox(IntPtr handle, string c, string t, uint lol);
-        public static Dictionary<ITransportConnection, string> tcs = new Dictionary<ITransportConnection, string>();
 
         protected override void Load() {
-            U.Events.OnPlayerConnected += delegate (UnturnedPlayer p) { tcs.Add(p.Player.channel.owner.transportConnection, "goida!"); };
             zone_manager.on_zone_enter_global += delegate (Player p, zone_component z) {
                 Console.WriteLine($"(global) enter: {p.channel.owner.playerID.characterName} / {z.name}");
             };
@@ -290,6 +383,18 @@ namespace rocket_test {
             embed.add_footer(new embed_footer("footer", null));
             embed.add_timestamp(DateTime.UtcNow.AddHours(-2));
             wh.add_embed(embed);
+            ui_manager.on_button_click_global += delegate (button b) {
+                Console.WriteLine($"button clicked: {b.path}");
+            };
+            ui_manager.on_textbox_text_changed_global += delegate (string oldval, string newval, textbox tb) {
+                Console.WriteLine($"textbox text changed: {tb.path} (was = {oldval} / now = {newval})");
+            };
+            ui_manager.on_progressbar_progress_changed_global += delegate (int oldval, int newval, progressbar_text pb) {
+                Console.WriteLine($"progress bar value changed: {pb.path} (was = {oldval} / now = {newval})");
+            };
+            ui_manager.on_control_hidden_global += delegate (control c) {
+                Console.WriteLine($"control hidden: {c.path}");
+            };
         }
 
         protected override void Unload() {

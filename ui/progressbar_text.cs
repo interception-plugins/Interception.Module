@@ -11,7 +11,7 @@ using UnityEngine;
 using interception.utils;
 
 namespace interception.ui {
-    public delegate void on_progress_changed_callback(int old_value, int new_value);
+    public delegate void on_progressbar_progress_changed_callback(int old_value, int new_value);
 
     public sealed class progressbar_text : control {
         control _parent;
@@ -30,7 +30,7 @@ namespace interception.ui {
         char fill_char;
         window root;
 
-        public on_progress_changed_callback on_progress_changed;
+        public on_progressbar_progress_changed_callback on_progress_changed;
 
         public progressbar_text(control _parent, short _key, ITransportConnection _tc, string _name, int max_chars, char fill_char, bool _visible_by_default = true) : base() {
             this._parent = _parent;
@@ -44,8 +44,8 @@ namespace interception.ui {
             this.progress = 0;
             this.root = get_root_window();
             if (root != null) {
-                root.internal_on_window_spawned += on_spawn;
-                root.internal_on_window_despawned += on_despawn;
+                root.internal_on_spawned += on_spawn;
+                root.internal_on_despawned += on_despawn;
             }
         }
 
@@ -54,6 +54,9 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
             _is_visible = true;
+            if (on_shown != null)
+                on_shown();
+            ui_manager.trigger_on_control_shown_global(this);
         }
 
         public override void hide(bool reliable = true) {
@@ -61,6 +64,9 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
             _is_visible = false;
+            if (on_hidden != null)
+                on_hidden();
+            ui_manager.trigger_on_control_hidden_global(this);
         }
 
         public void set_progress(int progress, bool reliable = true) {
@@ -71,6 +77,7 @@ namespace interception.ui {
             EffectManager.sendUIEffectText(key, tc, reliable, path, new string(fill_char, this.progress));
             if (on_progress_changed != null)
                 on_progress_changed(old, this.progress);
+            ui_manager.trigger_on_progressbar_progress_changed(old, this.progress, this);
         }
 
         public void increase_by(int val, bool reliable = true) {

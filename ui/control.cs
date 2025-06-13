@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using SDG.NetTransport;
 
 namespace interception.ui {
+    public delegate void on_control_shown_callback();
+    public delegate void on_control_hidden_callback();
+
     public abstract class control {
         public abstract control parent { get; }
         public abstract short key { get; }
@@ -16,6 +19,9 @@ namespace interception.ui {
         public abstract void hide(bool reliable);
         protected virtual void on_spawn() { }
         protected virtual void on_despawn() { }
+
+        public on_control_shown_callback on_shown;
+        public on_control_shown_callback on_hidden;
 
         //protected List<control> controls;
 

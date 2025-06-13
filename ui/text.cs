@@ -32,8 +32,8 @@ namespace interception.ui {
             //this.color = null;
             this.root = get_root_window();
             if (root != null) {
-                root.internal_on_window_spawned += on_spawn;
-                root.internal_on_window_despawned += on_despawn;
+                root.internal_on_spawned += on_spawn;
+                root.internal_on_despawned += on_despawn;
             }
         }
 
@@ -42,6 +42,9 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
             _is_visible = true;
+            if (on_shown != null)
+                on_shown();
+            ui_manager.trigger_on_control_shown_global(this);
         }
 
         public override void hide(bool reliable = true) {
@@ -49,6 +52,9 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
             _is_visible = false;
+            if (on_hidden != null)
+                on_hidden();
+            ui_manager.trigger_on_control_hidden_global(this);
         }
 
         public void set_text(string _text, bool reliable = true) {

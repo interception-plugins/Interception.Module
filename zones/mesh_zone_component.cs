@@ -11,11 +11,6 @@ namespace interception.zones {
 		MeshCollider collider;
 		GameObject child_object;
 
-		Dictionary<ulong, Player> players;
-
-		public on_zone_enter_callback on_zone_enter;
-		public on_zone_exit_callback on_zone_exit;
-
 		void on_server_disconnected(CSteamID csid) {
 			var p = PlayerTool.getPlayer(csid);
 			if (p == null || !players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
@@ -71,8 +66,6 @@ namespace interception.zones {
 
 			collider = child_object.GetComponent<MeshCollider>();
 
-			players = new Dictionary<ulong, Player>();
-
 			Provider.onServerDisconnected += on_server_disconnected;
 			if (zone_manager.debug_mode)
 				enable_debug();
@@ -90,8 +83,6 @@ namespace interception.zones {
 			}
 		}
 #pragma warning restore CS0618
-
-		public override List<Player> get_players() => players.Values.ToList();
 
 		internal void OnTriggerEnter(Collider other) {
 			var p = other.gameObject.GetComponent<Player>();

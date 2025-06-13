@@ -4,7 +4,7 @@ using SDG.Unturned;
 using SDG.NetTransport;
 
 namespace interception.ui {
-    public delegate void on_click_callback();
+    public delegate void on_button_click_callback();
 
     public sealed class button : control {
         control _parent;
@@ -21,7 +21,7 @@ namespace interception.ui {
         public override bool is_visible => _is_visible;
         window root;
 
-        public on_click_callback on_click;
+        public on_button_click_callback on_click;
 
         public button(control _parent, short _key, ITransportConnection _tc, string _name, bool _visible_by_default = true) {
             this._parent = _parent;
@@ -39,6 +39,9 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
             _is_visible = true;
+            if (on_shown != null)
+                on_shown();
+            ui_manager.trigger_on_control_shown_global(this);
         }
 
         public override void hide(bool reliable = true) {
@@ -46,19 +49,15 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
             _is_visible = false;
+            if (on_hidden != null)
+                on_hidden();
+            ui_manager.trigger_on_control_hidden_global(this);
         }
 
         internal void click() {
             if (on_click != null)
                 on_click();
-        }
-
-        public text add_text(string name) {
-            return new text(this, key, tc, name);
-        }
-
-        public image add_image(string name) {
-            return new image(this, key, tc, name);
+            ui_manager.trigger_on_button_click_global(this);
         }
     }
 }

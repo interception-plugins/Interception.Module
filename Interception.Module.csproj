@@ -140,6 +140,7 @@
     <Compile Include="utils\math_util.cs" />
     <Compile Include="utils\os_util.cs" />
     <Compile Include="utils\path_util.cs" />
+    <Compile Include="utils\ui_util.cs" />
     <Compile Include="utils\webhook_util.cs" />
     <Compile Include="zones\distance_fast_zone_component.cs" />
     <Compile Include="zones\distance_slow_zone_component.cs" />

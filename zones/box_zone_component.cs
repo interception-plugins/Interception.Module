@@ -12,11 +12,6 @@ namespace interception.zones {
 	public sealed class box_zone_component : zone_component {
 		BoxCollider collider;
 
-		Dictionary<ulong, Player> players;
-
-		public on_zone_enter_callback on_zone_enter;
-		public on_zone_exit_callback on_zone_exit;
-
 		void on_server_disconnected(CSteamID csid) {
 			var p = PlayerTool.getPlayer(csid);
 			if (p == null || !players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
@@ -37,14 +32,10 @@ namespace interception.zones {
 			collider.isTrigger = true;
 			collider.size = size;
 
-			players = new Dictionary<ulong, Player>();
-
 			Provider.onServerDisconnected += on_server_disconnected;
 			if (zone_manager.debug_mode)
 				enable_debug();
 		}
-
-		public override List<Player> get_players() => players.Values.ToList();
 
 #pragma warning disable CS0618
 		protected override IEnumerator<WaitForSecondsRealtime> debug_routine_worker() {

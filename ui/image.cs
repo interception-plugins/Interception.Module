@@ -30,8 +30,8 @@ namespace interception.ui {
             this._url = string.Empty;
             this.root = get_root_window();
             if (root != null) {
-                root.internal_on_window_spawned += on_spawn;
-                root.internal_on_window_despawned += on_despawn;
+                root.internal_on_spawned += on_spawn;
+                root.internal_on_despawned += on_despawn;
             }
         }
 
@@ -40,6 +40,9 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
             _is_visible = true;
+            if (on_shown != null)
+                on_shown();
+            ui_manager.trigger_on_control_shown_global(this);
         }
 
         public override void hide(bool reliable = true) {
@@ -47,20 +50,23 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
             _is_visible = false;
+            if (on_hidden != null)
+                on_hidden();
+            ui_manager.trigger_on_control_hidden_global(this);
         }
 
         //public void set_image(string _url, bool reliable = true) {
         //    EffectManager.sendUIEffectImageURL(key, tc, reliable, path, _url);
         //}
         
-        public void set_url(string _url) {
+        public void set_image(string _url, bool reliable = true, bool should_cache = true, bool force_refresh = false) {
             if (!root.is_spawned)
                 throw new Exception("root window is despawned");
-            EffectManager.sendUIEffectImageURL(key, tc, true, path, _url);
+            EffectManager.sendUIEffectImageURL(key, tc, reliable, path, _url, should_cache, force_refresh);
             this._url = _url;
         }
 
-        public string get_url() {
+        public string get_image_url() {
             return _url;
         }
 

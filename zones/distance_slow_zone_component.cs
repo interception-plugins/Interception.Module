@@ -8,12 +8,8 @@ using Steamworks;
 
 namespace interception.zones {
 	public sealed class distance_slow_zone_component : zone_component {
-		Dictionary<ulong, Player> players;
 		DateTime last_upd;
 		float radius;
-
-		public on_zone_enter_callback on_zone_enter;
-		public on_zone_exit_callback on_zone_exit;
 
 		void on_server_disconnected(CSteamID csid) {
 			var p = PlayerTool.getPlayer(csid);
@@ -30,7 +26,6 @@ namespace interception.zones {
 			gameObject.name = name;
 			gameObject.transform.position = pos;
 
-			players = new Dictionary<ulong, Player>();
 			last_upd = DateTime.UtcNow;
 			this.radius = radius;
 
@@ -38,8 +33,6 @@ namespace interception.zones {
 			if (zone_manager.debug_mode)
 				enable_debug();
 		}
-
-		public override List<Player> get_players() => players.Values.ToList();
 
 #pragma warning disable CS0618
 		protected override IEnumerator<WaitForSecondsRealtime> debug_routine_worker() {

@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 
 using UnityEngine;
 using SDG.Unturned;
-
-using interception.utils;
 
 namespace interception.zones {
     public delegate void on_zone_enter_callback(Player player);
@@ -16,6 +15,9 @@ namespace interception.zones {
         //public virtual void destroy() {
         //    Destroy(gameObject);
         //}
+
+        public on_zone_enter_callback on_zone_enter;
+        public on_zone_exit_callback on_zone_exit;
 
 #pragma warning disable CS0618
         protected virtual IEnumerator<WaitForSecondsRealtime> debug_routine_worker() {
@@ -37,7 +39,7 @@ namespace interception.zones {
             debug_routine = null;
         }
 
-        //protected Dictionary<ulong, Player> players = new Dictionary<ulong, Player>();
-        public virtual List<Player> get_players() { return null; }
+        protected readonly Dictionary<ulong, Player> players = new Dictionary<ulong, Player>();
+        public virtual List<Player> get_players() => players.Values.ToList();
     }
 }

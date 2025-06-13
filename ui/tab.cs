@@ -34,6 +34,9 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, name, true);
             _is_visible = true;
+            if (on_shown != null)
+                on_shown();
+            ui_manager.trigger_on_control_shown_global(this);
         }
 
         public override void hide(bool reliable = true) {
@@ -41,6 +44,9 @@ namespace interception.ui {
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, name, false);
             _is_visible = false;
+            if (on_hidden != null)
+                on_hidden();
+            ui_manager.trigger_on_control_hidden_global(this);
         }
 
         public tab add_tab(string name) {
@@ -53,6 +59,18 @@ namespace interception.ui {
 
         public image add_image(string name) {
             return new image(this, key, tc, name);
+        }
+
+        public button add_button(string name) {
+            return new button(this, key, tc, name);
+        }
+
+        public textbox add_textbox(string name) {
+            return new textbox(this, key, tc, name);
+        }
+
+        public progressbar_text add_progressbar(string name, int max_chars, char fill_char) {
+            return new progressbar_text(this, key, tc, name, max_chars, fill_char);
         }
     }
 }

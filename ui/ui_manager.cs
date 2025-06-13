@@ -7,15 +7,64 @@ namespace interception.ui {
     public delegate void on_window_spawned_global_callback(window w);
     public delegate void on_window_despawned_global_callback(window w);
 
-    //public delegate void on_click_global_callback(short key, string name, ITransportConnection tc);
+    public delegate void on_button_click_global_callback(button b);
+    public delegate void on_textbox_text_changed_global_callback(string old_value, string new_value, textbox tb);
+    public delegate void on_progressbar_progress_changed_global_callback(int old_value, int new_value, progressbar_text pb);
+
+    public delegate void on_control_shown_global_callback(control c);
+    public delegate void on_control_hidden_global_callback(control c);
 
     public static class ui_manager {
-        //public static on_window_created_global_callback on_window_created_global;
-        //public static on_window_shown_global_callback on_window_shown_global;
-        //public static on_window_hidden_global_callback on_window_hidden_global;
-        //public static on_window_destroyed_global_callback on_window_destroyed_global;
+        public static on_window_spawned_global_callback on_window_spawned_global;
+        public static on_window_despawned_global_callback on_window_despawned_global;
+        
+        public static on_button_click_global_callback on_button_click_global;
+        public static on_textbox_text_changed_global_callback on_textbox_text_changed_global;
+        public static on_progressbar_progress_changed_global_callback on_progressbar_progress_changed_global;
+
+        public static on_control_shown_global_callback on_control_shown_global;
+        public static on_control_hidden_global_callback on_control_hidden_global;
 
         internal static readonly Dictionary<ITransportConnection, Dictionary<string, control>> pool = new Dictionary<ITransportConnection, Dictionary<string, control>>();
+
+        public static int get_pool_count() {
+            return pool.Count;
+        }
+
+        internal static void trigger_on_window_spawned_global_global(window w) {
+            if (on_window_spawned_global != null)
+                on_window_spawned_global(w);
+        }
+
+        internal static void trigger_on_window_despawned_global_global(window w) {
+            if (on_window_despawned_global != null)
+                on_window_despawned_global(w);
+        }
+
+        internal static void trigger_on_button_click_global(button b) {
+            if (on_button_click_global != null)
+                on_button_click_global(b);
+        }
+
+        internal static void trigger_on_textbox_text_changed_global(string old_value, string new_value, textbox tb) {
+            if (on_textbox_text_changed_global != null)
+                on_textbox_text_changed_global(old_value, new_value, tb);
+        }
+
+        internal static void trigger_on_progressbar_progress_changed(int old_value, int new_value, progressbar_text pb) {
+            if (on_progressbar_progress_changed_global != null)
+                on_progressbar_progress_changed_global(old_value, new_value, pb);
+        }
+
+        internal static void trigger_on_control_shown_global(control c) {
+            if (on_control_shown_global != null)
+                on_control_shown_global(c);
+        }
+
+        internal static void trigger_on_control_hidden_global(control c) {
+            if (on_control_hidden_global != null)
+                on_control_hidden_global(c);
+        }
 
         internal static void add_player(ITransportConnection tc) {
             if (pool.ContainsKey(tc))

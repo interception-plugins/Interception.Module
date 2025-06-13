@@ -1,5 +1,9 @@
-zones
-	move players dict to base class
+ui
+	rewrite increment(), decrement(), increase_by(), decrease_by() (progressbar_text.cs)
+	make something like 'prefix' variable for button, progressbar_text, textbox (or add some background variable for tab, im not really sure for now)
+	add checkbox_text
+	add checkbox_image
+	add progressbar_image
 
 todo maybe some final renaming
 
