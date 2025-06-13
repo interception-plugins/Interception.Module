@@ -81,19 +81,23 @@ namespace interception.ui {
         }
 
         public void increase_by(int val, bool reliable = true) {
-            set_progress(progress += val, reliable);
+            int p = progress + val;
+            set_progress(p, reliable);
         }
 
         public void decrease_by(int val, bool reliable = true) {
-            set_progress(progress -= val, reliable);
+            int p = progress - val;
+            set_progress(p, reliable);
         }
 
         public void increment(bool reliable = true) {
-            set_progress(++progress, reliable);
+            int p = progress + 1;
+            set_progress(p, reliable);
         }
 
         public void decrement(bool reliable = true) {
-            set_progress(--progress, reliable);
+            int p = progress - 1;
+            set_progress(p, reliable);
         }
 
         public int get_progress() {
