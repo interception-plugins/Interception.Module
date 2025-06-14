@@ -9,7 +9,6 @@ namespace interception.serialization.types.discord {
     public class s_embed_field {
         [XmlAttribute]
         public string name { get; set; }
-        [XmlAttribute]
         public string value { get; set; }
         [XmlAttribute]
         public bool inline { get; set; }
@@ -23,10 +22,12 @@ namespace interception.serialization.types.discord {
         }
 
         public static implicit operator embed_field(s_embed_field f) {
+            if (f == null) return null;
             return new embed_field(f.name, f.value, f.inline);
         }
 
         public static implicit operator s_embed_field(embed_field f) {
+            if (f == null) return null;
             return new s_embed_field(f.name, f.value, f.inline);
         }
     }

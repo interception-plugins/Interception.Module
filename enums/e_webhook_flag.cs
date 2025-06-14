@@ -3,9 +3,9 @@ using System.Xml.Serialization;
 
 namespace interception.enums {
     public enum e_webhook_flag : int {
-        [XmlEnum("disable_auto_embeds")]
-        disable_auto_embeds = 4,
-        [XmlEnum("silent")]
-        silent = 4096
+        [XmlEnum("suppress_embeds")]
+        suppress_embeds = 4,
+        [XmlEnum("suppress_notifications")]
+        suppress_notifications = 4096
     }
 }

@@ -17,10 +17,12 @@ namespace interception.serialization.types.discord {
         }
 
         public static implicit operator embed_thumbnail(s_embed_thumbnail t) {
+            if (t == null) return null; 
             return new embed_thumbnail(t.url);
         }
 
         public static implicit operator s_embed_thumbnail(embed_thumbnail t) {
+            if (t == null) return null;
             return new s_embed_thumbnail(t.url);
         }
     }

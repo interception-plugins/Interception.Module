@@ -39,13 +39,18 @@ namespace rocket_test {
         button test_button0;
         button test_button1;
         button test_button2;
-        progressbar_text test_progress_bar_image_text;
+        text_progressbar text_progress_bar_test;
+        button test_button3;
+        button test_button4;
+        image_progressbar image_progress_bar_test;
         tab test_tab;
         button test_button5;
         textbox test_input_field;
         text test_input_field_dup_text;
         button test_button6;
         button test_button7;
+        tab scroll_test;
+        button_collection scroll_button_test;
 
         protected override void Load() {
             tc = base.Player.Player.channel.owner.transportConnection;
@@ -59,7 +64,7 @@ namespace rocket_test {
             main_tab = canvas.add_tab("main");
             test_text = main_tab.add_text("test_text");
             test_bg = main_tab.add_image("test_bg");
-            test_button0 = main_tab.add_button("test_button0");
+            test_button0 = new button(test_bg, test_bg.key, tc, "test_button0");
             test_button0.on_click += delegate () {
                 switch (i) {
                     case 0:
@@ -85,14 +90,22 @@ namespace rocket_test {
             };
             test_button1 = main_tab.add_button("test_button1");
             test_button1.on_click += delegate () {
-                test_progress_bar_image_text.increment();
+                text_progress_bar_test.increment();
             };
             test_button2 = main_tab.add_button("test_button2");
             test_button2.on_click += delegate () {
-                test_progress_bar_image_text.decrement();
+                text_progress_bar_test.decrement();
             };
-            test_progress_bar_image_text = main_tab.add_progressbar("Image/Image/test_progress_bar_image_text", 31, 'W');
-
+            text_progress_bar_test = main_tab.add_text_progressbar("Image/Image/text_progress_bar_test", 31, 'w');
+            test_button3 = main_tab.add_button("test_button3");
+            test_button3.on_click += delegate () {
+                image_progress_bar_test.increment();
+            };
+            test_button4 = main_tab.add_button("test_button4");
+            test_button4.on_click += delegate () {
+                image_progress_bar_test.decrement();
+            };
+            image_progress_bar_test = main_tab.add_image_progressbar("image_progress_bar_test", 19, "image_progress_bar_{0}");
             test_tab = main_tab.add_tab("test_tab");
             test_button5 = test_tab.add_button("test_button5");
             test_button5.on_click += delegate () {
@@ -116,6 +129,14 @@ namespace rocket_test {
                 ui_util.disable_cursor(base.Player.Player);
                 ui_util.disable_blur(base.Player.Player);
             };
+            scroll_test = main_tab.add_tab("Scroll View/Viewport/Content");
+            scroll_button_test = scroll_test.add_button_collection("scroll_button_test", 50, "_{0}");
+            scroll_button_test.on_click_any += delegate (int index) {
+                scroll_button_test.hide(index);
+            };
+            scroll_button_test.on_hidden_any += delegate (int index) {
+                Console.WriteLine($"button was hiiden in collection: {index}");
+            };
         }
 
         public void enable_ui() {
@@ -130,7 +151,7 @@ namespace rocket_test {
         public void Execute(IRocketPlayer caller, string[] args) {
             UnturnedPlayer p = (UnturnedPlayer)caller;
             if (args.Length < 1) {
-                UnturnedChat.Say(p, Syntax, Color.red);
+                p.Player.say_to(Syntax, Color.red);
                 return;
             }
             chat_util.simulate_message(p.Player, string.Join(" ", args), EChatMode.GLOBAL);
@@ -375,7 +396,7 @@ namespace rocket_test {
             cron_manager.register_event(new cron_event("test2", DateTime.Parse("12:31:00"), false, delegate (object[] args) { Console.WriteLine((string)args[0]); }, "test2"));
             cron_manager.register_event(new cron_event("test3", DateTime.Parse("12:31:00"), true, delegate (object[] args) { Console.WriteLine((string)args[0]); }, "test3"));
             cron_manager.register_event(new cron_event("test4", DateTime.Parse("12:32:30"), false, delegate (object[] args) { Console.WriteLine(cron_manager.is_event_exist("test4")); }));
-            webhook wh = new webhook(null, null, null, e_webhook_flag.silent);
+            webhook wh = new webhook(null, null, null, e_webhook_flag.suppress_notifications);
             var embed = new embed();
             embed.add_color(Color.blue);
             embed.add_title("embed");
@@ -389,8 +410,11 @@ namespace rocket_test {
             ui_manager.on_textbox_text_changed_global += delegate (string oldval, string newval, textbox tb) {
                 Console.WriteLine($"textbox text changed: {tb.path} (was = {oldval} / now = {newval})");
             };
-            ui_manager.on_progressbar_progress_changed_global += delegate (int oldval, int newval, progressbar_text pb) {
+            ui_manager.on_progressbar_progress_changed_global += delegate (int oldval, int newval, progressbar pb) {
                 Console.WriteLine($"progress bar value changed: {pb.path} (was = {oldval} / now = {newval})");
+            };
+            ui_manager.on_button_collection_click_global += delegate (int i, button_collection bc) {
+                Console.WriteLine($"button was clicked in collection: {bc.get_path_of(i)}");
             };
             ui_manager.on_control_hidden_global += delegate (control c) {
                 Console.WriteLine($"control hidden: {c.path}");

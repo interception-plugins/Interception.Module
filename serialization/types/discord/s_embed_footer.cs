@@ -20,10 +20,12 @@ namespace interception.serialization.types.discord {
         }
 
         public static implicit operator embed_footer(s_embed_footer f) {
+            if (f == null) return null;
             return new embed_footer(f.text, f.icon_url);
         }
 
         public static implicit operator s_embed_footer(embed_footer f) {
+            if (f == null) return null;
             return new s_embed_footer(f.text, f.icon_url);
         }
     }

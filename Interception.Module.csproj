@@ -125,11 +125,14 @@
     <Compile Include="main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="server\restart_manager.cs" />
+    <Compile Include="ui\button_collection.cs" />
     <Compile Include="ui\button.cs" />
     <Compile Include="ui\control.cs" />
     <Compile Include="ui\image.cs" />
+    <Compile Include="ui\progressbar.cs" />
+    <Compile Include="ui\image_progressbar.cs" />
+    <Compile Include="ui\text_progressbar.cs" />
     <Compile Include="ui\tab.cs" />
-    <Compile Include="ui\progressbar_text.cs" />
     <Compile Include="ui\textbox.cs" />
     <Compile Include="ui\text.cs" />
     <Compile Include="ui\ui_manager.cs" />

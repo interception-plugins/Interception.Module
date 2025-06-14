@@ -3,8 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-using UnityEngine;
-
 namespace interception.serialization.types {
     [Serializable]
     [XmlType("dictionary")]

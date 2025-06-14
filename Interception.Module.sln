@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Interception.Module", "Interception.Module.csproj", "{BA2C8896-3B05-4BCF-9914-C99EEF43CDA3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rocket_test", "rocket_test\rocket_test.csproj", "{922155EC-23AF-4FE3-A4F0-1757F108CBCF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test_plugin", "test_plugin\test_plugin.csproj", "{922155EC-23AF-4FE3-A4F0-1757F108CBCF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9F7994FB-D013-43C3-9A69-895DEAB6F2BD}"
 	ProjectSection(SolutionItems) = preProject

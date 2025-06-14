@@ -13,7 +13,6 @@ namespace interception.serialization.types.discord {
         public string username { get; set; }
         [XmlAttribute]
         public string avatar_url { get; set; }
-        [XmlAttribute]
         public string content { get; set; }
         [XmlArrayItem("embed")]
         public List<s_embed> embeds { get; set; }
@@ -44,7 +43,7 @@ namespace interception.serialization.types.discord {
                 wh.flags |= flags[i];
             len = embeds.Count;
             for (int i = 0; i < len; i++)
-                wh.add_embed(embeds[i]);
+                wh.add_embed((embed)embeds[i]);
             len = files.Count;
             for (int i = 0; i < len; i++) {
                 switch (files[i].type) {
@@ -60,11 +59,11 @@ namespace interception.serialization.types.discord {
             return wh;
         }
 
-        public static implicit operator webhook(s_webhook wh) {
+        public static explicit operator webhook(s_webhook wh) {
             return wh.deserialize();
         }
 
-        public static implicit operator s_webhook(webhook wh) {
+        public static explicit operator s_webhook(webhook wh) {
             return wh.serialize();
         }
     }

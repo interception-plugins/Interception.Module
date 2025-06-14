@@ -103,8 +103,12 @@ namespace interception.ui {
             return new textbox(this, key, tc, name);
         }
 
-        public progressbar_text add_progressbar(string name, int max_chars, char fill_char) {
-            return new progressbar_text(this, key, tc, name, max_chars, fill_char);
+        public text_progressbar add_text_progressbar(string name, int max_chars, char fill_char) {
+            return new text_progressbar(this, key, tc, name, max_chars, fill_char);
+        }
+
+        public image_progressbar add_image_progressbar(string name, int max_children_count, string child_name_format) {
+            return new image_progressbar(this, key, tc, name, max_children_count, child_name_format);
         }
     }
 }

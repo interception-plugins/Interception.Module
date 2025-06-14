@@ -77,7 +77,7 @@ namespace interception.discord.types {
             var wh = new s_webhook(username, avatar_url, content);
             var len = embeds.Count;
             for (int i = 0; i < len; i++)
-                wh.embeds.Add(embeds[i]);
+                wh.embeds.Add((s_embed)embeds[i]);
             len = files.Count;
             for (int i = 0; i < len; i++)
                 wh.files.Add(new s_file_attachement(e_file_attachement_type.base64, Convert.ToBase64String(files[i].data), files[i].name));

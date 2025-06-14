@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 using SDG.NetTransport;
 
@@ -9,7 +10,11 @@ namespace interception.ui {
 
     public delegate void on_button_click_global_callback(button b);
     public delegate void on_textbox_text_changed_global_callback(string old_value, string new_value, textbox tb);
-    public delegate void on_progressbar_progress_changed_global_callback(int old_value, int new_value, progressbar_text pb);
+    public delegate void on_progressbar_progress_changed_global_callback(int old_value, int new_value, progressbar pb);
+    
+    public delegate void on_button_collection_click_global_callback(int index, button_collection bc);
+    public delegate void on_button_collection_shown_global_callback(int index, button_collection bc);
+    public delegate void on_button_collection_hidden_global_callback(int index, button_collection bc);
 
     public delegate void on_control_shown_global_callback(control c);
     public delegate void on_control_hidden_global_callback(control c);
@@ -21,6 +26,10 @@ namespace interception.ui {
         public static on_button_click_global_callback on_button_click_global;
         public static on_textbox_text_changed_global_callback on_textbox_text_changed_global;
         public static on_progressbar_progress_changed_global_callback on_progressbar_progress_changed_global;
+
+        public static on_button_collection_click_global_callback on_button_collection_click_global;
+        public static on_button_collection_shown_global_callback on_button_collection_shown_global;
+        public static on_button_collection_hidden_global_callback on_button_collection_hidden_global;
 
         public static on_control_shown_global_callback on_control_shown_global;
         public static on_control_hidden_global_callback on_control_hidden_global;
@@ -51,9 +60,24 @@ namespace interception.ui {
                 on_textbox_text_changed_global(old_value, new_value, tb);
         }
 
-        internal static void trigger_on_progressbar_progress_changed(int old_value, int new_value, progressbar_text pb) {
+        internal static void trigger_on_progressbar_progress_changed(int old_value, int new_value, progressbar pb) {
             if (on_progressbar_progress_changed_global != null)
                 on_progressbar_progress_changed_global(old_value, new_value, pb);
+        }
+
+        internal static void trigger_on_button_collection_click_global(int index, button_collection bc) {
+            if (on_button_collection_click_global != null)
+                on_button_collection_click_global(index, bc);
+        }
+
+        internal static void trigger_on_button_collection_shown_global(int index, button_collection bc) {
+            if (on_button_collection_shown_global != null)
+                on_button_collection_shown_global(index, bc);
+        }
+
+        internal static void trigger_on_button_collection_hidden_global(int index, button_collection bc) {
+            if (on_button_collection_hidden_global != null)
+                on_button_collection_hidden_global(index, bc);
         }
 
         internal static void trigger_on_control_shown_global(control c) {
@@ -88,11 +112,31 @@ namespace interception.ui {
             pool[ctrl.tc].Add(ctrl.name, ctrl);
         }
 
+
+        internal static void add_control(control ctrl, string name) {
+            if (ctrl == null)
+                throw new NullReferenceException("parameter is null");
+            if (!pool.ContainsKey(ctrl.tc))
+                throw new KeyNotFoundException($"{ctrl.path}'s transport connection is not present in the pool");
+            if (pool[ctrl.tc].ContainsKey(name))
+                throw new ArgumentException($"{name}'s already present in the pool");
+            pool[ctrl.tc].Add(name, ctrl);
+        }
+
         internal static void on_effect_button_clicked(ITransportConnection tc, string b) {
             if (!pool.ContainsKey(tc))
                 throw new ArgumentException($"transport connection is not present in the pool");
-            if (pool[tc].ContainsKey(b) && pool[tc][b] is button)
+            if (pool[tc].ContainsKey(b) && (pool[tc][b] is button)) {
                 ((button)pool[tc][b]).click();
+                return;
+            }
+            string bb = Regex.Replace(b, @"[0-9]{1,}", "{{INDEX}}");
+            if (pool[tc].ContainsKey(bb) && (pool[tc][bb] is button_collection)) {
+                int index;
+                if (!int.TryParse(Regex.Replace(b, @"[^0-9]", string.Empty), out index)) return;
+                ((button_collection)pool[tc][bb]).click_any(index);
+                return;
+            }
         }
 
         internal static void on_effect_text_commited(ITransportConnection tc, string b, string t) {

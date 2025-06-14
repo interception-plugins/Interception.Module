@@ -6,7 +6,7 @@ using SDG.NetTransport;
 namespace interception.ui {
     public delegate void on_textbox_text_changed_callback(string old_value, string new_value);
 
-    public sealed class textbox : control {
+    public class textbox : control {
         control _parent;
         public override control parent => _parent;
         short _key;

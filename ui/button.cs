@@ -6,7 +6,7 @@ using SDG.NetTransport;
 namespace interception.ui {
     public delegate void on_button_click_callback();
 
-    public sealed class button : control {
+    public class button : control {
         control _parent;
         public override control parent => _parent;
         short _key;
@@ -17,13 +17,13 @@ namespace interception.ui {
         public override string name => _name;
         string _path;
         public override string path => _path;
-        bool _is_visible;
+        protected bool _is_visible;
         public override bool is_visible => _is_visible;
-        window root;
+        protected window root;
 
         public on_button_click_callback on_click;
 
-        public button(control _parent, short _key, ITransportConnection _tc, string _name, bool _visible_by_default = true) {
+        public button(control _parent, short _key, ITransportConnection _tc, string _name, bool _visible_by_default = true) : base() {
             this._parent = _parent;
             this._key = _key;
             this._tc = _tc;

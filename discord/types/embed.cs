@@ -74,13 +74,13 @@ namespace interception.discord.types {
         }
 
         public void add_url(string _url) {
-            if (!_url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !_url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            if (url != null && !_url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !_url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException($"passed parameter is not a url (\"{_url}\")");
             this._url = _url;
         }
 
         public void add_description(string _description) {
-            if (_description.Length > 4096)
+            if (_description != null && _description.Length > 4096)
                 throw new ArgumentOutOfRangeException("description length must be less or equal 4096");
             this._description = _description;
         }

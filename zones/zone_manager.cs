@@ -162,5 +162,9 @@ namespace interception.zones {
             if (!pool.ContainsKey(name)) return null;
             return pool[name].GetComponent<zone_component>();
         }
+
+        public static int get_zones_count() {
+            return pool.Count;
+        }
     }
 }

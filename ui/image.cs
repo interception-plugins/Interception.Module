@@ -4,7 +4,7 @@ using SDG.Unturned;
 using SDG.NetTransport;
 
 namespace interception.ui {
-    public sealed class image : control {
+    public class image : control {
         control _parent;
         public override control parent => _parent;
         short _key;

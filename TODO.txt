@@ -1,10 +1,4 @@
-ui
-	make something like 'prefix' variable for button, progressbar_text, textbox (or add some background variable for tab, im not really sure for now)
-	add checkbox_text
-	add checkbox_image
-	add progressbar_image
-
-todo maybe some final renaming
+maybe some final renaming
 
 zones rocket plugin
 
