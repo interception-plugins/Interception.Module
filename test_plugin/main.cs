@@ -141,7 +141,7 @@ namespace rocket_test {
 
         public void enable_ui() {
             canvas.spawn();
-            ui_util.enable_cursor(base.Player.Player);
+            //ui_util.enable_cursor(base.Player.Player);
             ui_util.enable_blur(base.Player.Player);
             test_text.set_text($"this text was changed by a plugin: {System.Reflection.Assembly.GetExecutingAssembly().FullName}");
         }

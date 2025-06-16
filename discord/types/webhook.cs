@@ -15,7 +15,7 @@ namespace interception.discord.types {
         public List<embed> embeds { get; private set; }
         public e_webhook_flag flags { get; set; }
         [JsonIgnore]
-        public List<file_attachement> files { get; private set; }
+        public List<file_attachment> files { get; private set; }
 
         public webhook(string username, string avatar_url, string content, e_webhook_flag flags = 0) {
             if (username != null && (username.Length == 0 || username.Length > 80))
@@ -29,7 +29,7 @@ namespace interception.discord.types {
             this.content = content;
             this.embeds = new List<embed>(10);
             this.flags = flags;
-            this.files = new List<file_attachement>(10);
+            this.files = new List<file_attachment>(10);
         }
 
         public void add_embed(embed _embed) {
@@ -47,7 +47,7 @@ namespace interception.discord.types {
             if (data.Length >= 10000000)
                 throw new ArgumentOutOfRangeException("file size must be less or equal 10 mb");
             string name = Path.GetFileName(filename);
-            files.Add(new file_attachement(data, name));
+            files.Add(new file_attachment(data, name));
         }
 
         public void add_file(byte[] data, string name) {
@@ -55,7 +55,7 @@ namespace interception.discord.types {
                 throw new ArgumentOutOfRangeException("cannot add more than 10 files");
             if (data.Length >= 10000000) // or 10485760?
                 throw new ArgumentOutOfRangeException("file size must be less or equal 10 mb");
-            files.Add(new file_attachement(data, name));
+            files.Add(new file_attachment(data, name));
         }
 
         public void add_file(string base64, string name) {
@@ -64,7 +64,7 @@ namespace interception.discord.types {
             var data = Convert.FromBase64String(base64);
             if (data.Length >= 10000000)
                 throw new ArgumentOutOfRangeException("file size must be less or equal 10 mb");
-            files.Add(new file_attachement(data, name));
+            files.Add(new file_attachment(data, name));
         }
 
         public string serialize_json_data() {
@@ -80,7 +80,7 @@ namespace interception.discord.types {
                 wh.embeds.Add((s_embed)embeds[i]);
             len = files.Count;
             for (int i = 0; i < len; i++)
-                wh.files.Add(new s_file_attachement(e_file_attachement_type.base64, Convert.ToBase64String(files[i].data), files[i].name));
+                wh.files.Add(new s_file_attachment(e_file_attachment_type.base64, Convert.ToBase64String(files[i].data), files[i].name));
             return wh;
         }
     }

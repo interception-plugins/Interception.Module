@@ -81,10 +81,10 @@
     <Compile Include="discord\types\embed_author.cs" />
     <Compile Include="discord\types\embed_thumbnail.cs" />
     <Compile Include="discord\types\embed_image.cs" />
-    <Compile Include="discord\types\file_attachement.cs" />
+    <Compile Include="discord\types\file_attachment.cs" />
     <Compile Include="discord\types\webhook.cs" />
     <Compile Include="discord\webhook_manager.cs" />
-    <Compile Include="enums\e_file_attachement_type.cs" />
+    <Compile Include="enums\e_file_attachment_type.cs" />
     <Compile Include="enums\e_webhook_flag.cs" />
     <Compile Include="enums\e_zone_type.cs" />
     <Compile Include="extensions\Color32.ex.cs" />
@@ -96,7 +96,7 @@
     <Compile Include="serialization\types\discord\s_embed_footer.cs" />
     <Compile Include="serialization\types\discord\s_embed_field.cs" />
     <Compile Include="serialization\types\discord\s_embed_author.cs" />
-    <Compile Include="serialization\types\discord\s_file_attachement.cs" />
+    <Compile Include="serialization\types\discord\s_file_attachment.cs" />
     <Compile Include="serialization\types\discord\s_webhook.cs" />
     <Compile Include="serialization\types\xml_dictionary.cs" />
     <Compile Include="serialization\types\xml_pair.cs" />

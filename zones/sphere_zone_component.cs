@@ -10,17 +10,6 @@ namespace interception.zones {
 	public sealed class sphere_zone_component : zone_component {
 		SphereCollider collider;
 
-		void on_server_disconnected(CSteamID csid) {
-			var p = PlayerTool.getPlayer(csid);
-			if (p == null || !players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
-			if (on_zone_exit != null)
-				on_zone_exit(p);
-			zone_manager.trigger_on_zone_exit_global(p, this);
-			players.Remove(p.channel.owner.playerID.steamID.m_SteamID);
-			if (zone_manager.debug_mode)
-				Console.WriteLine($"zone exit ({gameObject.name}): {p.channel.owner.playerID.characterName}");
-		}
-
 		public void init(string name, Vector3 pos, float radius) {
 			gameObject.name = name;
 			gameObject.transform.position = pos;
@@ -29,9 +18,7 @@ namespace interception.zones {
 			collider.isTrigger = true;
 			collider.radius = radius;
 
-			Provider.onServerDisconnected += on_server_disconnected;
-			if (zone_manager.debug_mode)
-				enable_debug();
+			base.init();
 		}
 
 #pragma warning disable CS0618
@@ -50,40 +37,5 @@ namespace interception.zones {
 			}
 		}
 #pragma warning restore CS0618
-
-		void OnTriggerEnter(Collider other) {
-			if (other == null || !other.CompareTag("Player")) return;
-
-			var p = other.gameObject.GetComponent<Player>();
-
-			if (on_zone_enter != null)
-				on_zone_enter(p);
-			zone_manager.trigger_on_zone_enter_global(p, this);
-
-			if (players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
-			players.Add(p.channel.owner.playerID.steamID.m_SteamID, p);
-			if (zone_manager.debug_mode)
-				Console.WriteLine($"zone enter ({gameObject.name}): {p.channel.owner.playerID.characterName}");
-		}
-
-		void OnTriggerExit(Collider other) {
-			if (other == null || !other.CompareTag("Player")) return;
-
-			var p = other.gameObject.GetComponent<Player>();
-			if (on_zone_exit != null)
-				on_zone_exit(p);
-			zone_manager.trigger_on_zone_exit_global(p, this);
-
-			if (!players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
-			players.Remove(p.channel.owner.playerID.steamID.m_SteamID);
-			if (zone_manager.debug_mode)
-				Console.WriteLine($"zone exit ({gameObject.name}): {p.channel.owner.playerID.characterName}");
-		}
-
-		void OnDestroy() {
-			Provider.onServerDisconnected -= on_server_disconnected;
-			on_zone_enter = null;
-			on_zone_exit = null;
-		}
 	}
 }

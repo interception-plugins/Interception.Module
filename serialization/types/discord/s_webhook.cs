@@ -19,12 +19,12 @@ namespace interception.serialization.types.discord {
         [XmlArrayItem("webhook_flag")]
         public List<e_webhook_flag> flags { get; set; }
         [XmlArrayItem("file_attachement")]
-        public List<s_file_attachement> files { get; set; }
+        public List<s_file_attachment> files { get; set; }
 
         public s_webhook() {
             this.embeds = new List<s_embed>(10);
             this.flags = new List<e_webhook_flag>();
-            this.files = new List<s_file_attachement>(10);
+            this.files = new List<s_file_attachment>(10);
         }
 
         public s_webhook(string username, string avatar_url, string content) {
@@ -33,7 +33,7 @@ namespace interception.serialization.types.discord {
             this.content = content;
             this.embeds = new List<s_embed>(10);
             this.flags = new List<e_webhook_flag>();
-            this.files = new List<s_file_attachement>(10);
+            this.files = new List<s_file_attachment>(10);
         }
 
         public webhook deserialize() {
@@ -47,10 +47,10 @@ namespace interception.serialization.types.discord {
             len = files.Count;
             for (int i = 0; i < len; i++) {
                 switch (files[i].type) {
-                    case e_file_attachement_type.path:
+                    case e_file_attachment_type.path:
                         wh.add_file(files[i].path_or_data);
                         break;
-                    case e_file_attachement_type.base64:
+                    case e_file_attachment_type.base64:
                         wh.add_file(files[i].path_or_data, files[i].file_name);
                         break;
                     default: break;
