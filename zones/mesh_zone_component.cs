@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.ExceptionServices;
 
 using UnityEngine;
 using SDG.Unturned;
-using Steamworks;
 
 namespace interception.zones {
 	public sealed class mesh_zone_component : zone_component {
@@ -50,7 +49,9 @@ namespace interception.zones {
 			catch (Exception ex) {
 				if (destroy_if_failed)
 					Destroy(gameObject);
-				throw ex;
+				ExceptionDispatchInfo.Capture(ex).Throw();
+				//throw new Exception("Rethrown", ex);
+				return;
             }
 
 			collider = child_object.GetComponent<MeshCollider>();

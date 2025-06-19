@@ -1,3 +1,6 @@
+cron_manager.cs
+	better comparing
+
 hooking
 
 documentation (ReadTheDocs)

@@ -26,7 +26,7 @@ namespace interception.cron {
 
         internal static void tick() {
             for (int i = events.Count - 1; i >= 0; i--) {
-                if (DateTime.UtcNow.ToUniversalTime().ToString("HH:mm:ss") == events[i].execution_time.ToUniversalTime().ToString("HH:mm:ss")) { // todo better comparing maybe
+                if (DateTime.UtcNow.ToUniversalTime().ToString("HH:mm:ss") == events[i].execution_time.ToUniversalTime().ToString("HH:mm:ss")) { // todo better comparing
                     events[i].execute();
                     if (events[i].trigger_once)
                         unregister_event(events[i].name);

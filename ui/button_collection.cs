@@ -41,11 +41,23 @@ namespace interception.ui {
         }
 
         public override void show(bool reliable = true) {
-            throw new NotImplementedException("this method cannot be called without index, please use show(index, reliable) instead");
+            if (!root.is_spawned)
+                throw new Exception("root window is despawned");
+            for (int i = 0; i < max_buttons; i++)
+                EffectManager.sendUIEffectVisibility(key, tc, reliable, get_path_of(i), true);
+            if (on_shown != null)
+                on_shown();
+            ui_manager.trigger_on_control_shown_global(this);
         }
 
         public override void hide(bool reliable = true) {
-            throw new NotImplementedException("this method cannot be called without index, please use hide(index, reliable) instead");
+            if (!root.is_spawned)
+                throw new Exception("root window is despawned");
+            for (int i = 0; i < max_buttons; i++)
+                EffectManager.sendUIEffectVisibility(key, tc, reliable, get_path_of(i), false);
+            if (on_hidden != null)
+                on_hidden();
+            ui_manager.trigger_on_control_hidden_global(this);
         }
 
         public string get_path_of(int index) {

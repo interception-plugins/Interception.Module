@@ -8,7 +8,7 @@ using interception.discord.types;
 
 namespace interception.discord {
     public static class webhook_manager {
-        public static void/*discord_response */send_webhook(string url, webhook wh) {
+        public static IRestResponse send_webhook(string url, webhook wh) {
             RestRequest request = new RestRequest();
             request.Method = Method.POST;
             var len = wh.files.Count;
@@ -23,12 +23,11 @@ namespace interception.discord {
                 request.AddJsonBody(wh.serialize_json_data());
             }
             RestClient rc = new RestClient(url);
-            /*var result = */rc.Post(request); // todo
-            //return new discord_response(result.StatusCode, result.Content);
+            return rc.Post(request);
         }
 
         // im really bad at asynchronous programming
-        public static async Task send_webhook_async_task(string url, webhook wh) {
+        public static async Task<IRestResponse> send_webhook_async(string url, webhook wh) {
             RestRequest request = new RestRequest();
             request.Method = Method.POST;
             var len = wh.files.Count;
@@ -43,11 +42,11 @@ namespace interception.discord {
                 request.AddJsonBody(wh.serialize_json_data());
             }
             RestClient rc = new RestClient(url);
-            /*var result = */await rc.PostAsync<IRestResponse>(request).ConfigureAwait(false); // todo
+            return await rc.PostAsync<IRestResponse>(request).ConfigureAwait(false);
         }
 
-        public static void send_webhook_async(string url, webhook wh) {
-            Task.Run(async () => await send_webhook_async_task(url, wh));
+        public static void send_webhook_async_unsafe(string url, webhook wh) {
+            Task.Run(async () => await send_webhook_async(url, wh));
         }
     }
 }

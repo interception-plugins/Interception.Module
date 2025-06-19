@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace interception.server {
+namespace interception.process {
     public delegate void on_restart_performed_global_callback(int delay);
 
     public static class restart_manager {

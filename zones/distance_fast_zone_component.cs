@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using UnityEngine;
 using SDG.Unturned;
-using Steamworks;
 
 namespace interception.zones {
 	public sealed class distance_fast_zone_component : zone_component {
@@ -46,30 +44,28 @@ namespace interception.zones {
 #pragma warning restore CS0618
 
 		void Update() {
-			if ((DateTime.UtcNow - last_upd).TotalMilliseconds < 500) return;
+			if ((DateTime.UtcNow - last_upd).TotalMilliseconds < 250) return;
 			var len = coords.Count;
 			for (int i = 0; i < len; i++) {
-				var region_players = zone_manager.regions_to_check[coords[i]].Values.ToList();
-				var len2 = region_players.Count;
-				for (int j = 0; j < len2; j++) {
-					if ((region_players[j].transform.position - gameObject.transform.position).sqrMagnitude <= radius * radius && !region_players[j].life.isDead) {
-						if (!players.ContainsKey(region_players[j].channel.owner.playerID.steamID.m_SteamID)) {
-							players.Add(region_players[j].channel.owner.playerID.steamID.m_SteamID, region_players[j]);
+				foreach (var region_player in zone_manager.regions_to_check[coords[i]].Values) {
+					if ((region_player.transform.position - gameObject.transform.position).sqrMagnitude <= radius * radius && !region_player.life.isDead) {
+						if (!players.ContainsKey(region_player.channel.owner.playerID.steamID.m_SteamID)) {
+							players.Add(region_player.channel.owner.playerID.steamID.m_SteamID, region_player);
 							if (on_zone_enter != null)
-								on_zone_enter(region_players[j]);
-							zone_manager.trigger_on_zone_enter_global(region_players[j], this);
+								on_zone_enter(region_player);
+							zone_manager.trigger_on_zone_enter_global(region_player, this);
 							if (zone_manager.debug_mode)
-								Console.WriteLine($"zone enter ({gameObject.name}): {region_players[j].channel.owner.playerID.characterName}");
+								Console.WriteLine($"zone enter ({gameObject.name}): {region_player.channel.owner.playerID.characterName}");
 						}
 					}
 					else {
-						if (players.ContainsKey(region_players[j].channel.owner.playerID.steamID.m_SteamID)) {
-							players.Remove(region_players[j].channel.owner.playerID.steamID.m_SteamID);
+						if (players.ContainsKey(region_player.channel.owner.playerID.steamID.m_SteamID)) {
+							players.Remove(region_player.channel.owner.playerID.steamID.m_SteamID);
 							if (on_zone_exit != null)
-								on_zone_exit(region_players[j]);
-							zone_manager.trigger_on_zone_exit_global(region_players[j], this);
+								on_zone_exit(region_player);
+							zone_manager.trigger_on_zone_exit_global(region_player, this);
 							if (zone_manager.debug_mode)
-								Console.WriteLine($"zone exit ({gameObject.name}): {region_players[j].channel.owner.playerID.characterName}");
+								Console.WriteLine($"zone exit ({gameObject.name}): {region_player.channel.owner.playerID.characterName}");
 						}
 					}
 				}

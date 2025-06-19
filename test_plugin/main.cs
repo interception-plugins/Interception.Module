@@ -61,6 +61,7 @@ namespace rocket_test {
             canvas.on_despawned += delegate () {
                 Console.WriteLine("window despawned");
             };
+            //var v = canvas.is_visible;
             main_tab = canvas.add_tab("main");
             test_text = main_tab.add_text("test_text");
             test_bg = main_tab.add_image("test_bg");
@@ -156,7 +157,7 @@ namespace rocket_test {
             }
             chat_util.simulate_message(p.Player, string.Join(" ", args), EChatMode.GLOBAL);
             p.GetComponent<ui_test_component>().enable_ui();
-            Console.WriteLine(ui_manager.get_pool_count());
+            Console.WriteLine(ui_manager.get_pool_connections_count());
         }
 
         public AllowedCaller AllowedCaller => AllowedCaller.Player;

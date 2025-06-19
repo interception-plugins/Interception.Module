@@ -36,8 +36,14 @@ namespace interception.ui {
 
         internal static readonly Dictionary<ITransportConnection, Dictionary<string, control>> pool = new Dictionary<ITransportConnection, Dictionary<string, control>>();
 
-        public static int get_pool_count() {
+        public static int get_pool_connections_count() {
             return pool.Count;
+        }
+
+        public static int get_pool_controls_count(ITransportConnection tc) {
+            if (!pool.ContainsKey(tc))
+                throw new ArgumentException($"transport connection is not present in the pool");
+            return pool[tc].Count;
         }
 
         internal static void trigger_on_window_spawned_global_global(window w) {

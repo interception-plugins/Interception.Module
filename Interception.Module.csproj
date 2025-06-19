@@ -119,12 +119,12 @@
     <Compile Include="serialization\types\zones\s_mesh_zone.cs" />
     <Compile Include="serialization\types\zones\s_sphere_zone.cs" />
     <Compile Include="serialization\types\zones\s_zone.cs" />
-    <Compile Include="server\restart_component.cs" />
+    <Compile Include="process\restart_component.cs" />
     <Compile Include="time\time_component.cs" />
     <Compile Include="time\time_manager.cs" />
     <Compile Include="main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="server\restart_manager.cs" />
+    <Compile Include="process\restart_manager.cs" />
     <Compile Include="ui\button_collection.cs" />
     <Compile Include="ui\button.cs" />
     <Compile Include="ui\control.cs" />

@@ -20,13 +20,13 @@ namespace interception.zones {
         internal static readonly Dictionary<RegionCoordinate, Dictionary<ulong, Player>> regions_to_check = new Dictionary<RegionCoordinate, Dictionary<ulong, Player>>();
 
         public static sphere_zone_component create_sphere_zone(string name, Vector3 pos, float radius) {
-            if (pool.ContainsKey(name.ToLower()))
+            if (pool.ContainsKey(name))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<sphere_zone_component>();
             try {
-                comp.init(name.ToLower(), pos, radius);
-                pool.Add(name.ToLower(), obj);
+                comp.init(name, pos, radius);
+                pool.Add(name, obj);
             }
             catch {
                 UnityEngine.Object.Destroy(obj);
@@ -36,13 +36,13 @@ namespace interception.zones {
         }
 
         public static box_zone_component create_box_zone(string name, Vector3 pos, Vector3 forward, Vector3 size) {
-            if (pool.ContainsKey(name.ToLower()))
+            if (pool.ContainsKey(name))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<box_zone_component>();
             try {
-                comp.init(name.ToLower(), pos, forward, size);
-                pool.Add(name.ToLower(), obj);
+                comp.init(name, pos, forward, size);
+                pool.Add(name, obj);
             }
             catch {
                 UnityEngine.Object.Destroy(obj);
@@ -52,49 +52,49 @@ namespace interception.zones {
         }
 
         public static distance_slow_zone_component create_distance_slow_zone(string name, Vector3 pos, float radius) {
-            if (pool.ContainsKey(name.ToLower()))
+            if (pool.ContainsKey(name))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<distance_slow_zone_component>();
             try {
-                comp.init(name.ToLower(), pos, radius);
-                pool.Add(name.ToLower(), obj);
+                comp.init(name, pos, radius);
+                pool.Add(name, obj);
             }
-            catch (Exception ex) {
+            catch {
                 UnityEngine.Object.Destroy(obj);
-                throw ex;
+                return null;
             }
             return comp;
         }
 
         public static distance_fast_zone_component create_distance_fast_zone(string name, Vector3 pos, float radius) {
-            if (pool.ContainsKey(name.ToLower()))
+            if (pool.ContainsKey(name))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<distance_fast_zone_component>();
             try {
-                comp.init(name.ToLower(), pos, radius);
-                pool.Add(name.ToLower(), obj);
+                comp.init(name, pos, radius);
+                pool.Add(name, obj);
             }
-            catch (Exception ex) {
+            catch {
                 UnityEngine.Object.Destroy(obj);
-                throw ex;
+                return null;
             }
             return comp;
         }
 
         public static mesh_zone_component create_mesh_zone(string name, Vector3 pos, float height, int? mask) {
-            if (pool.ContainsKey(name.ToLower()))
+            if (pool.ContainsKey(name))
                 throw new ArgumentException($"zone with name {name} already exist");
             GameObject obj = new GameObject();
             var comp = obj.AddComponent<mesh_zone_component>();
             try {
-                comp.init(name.ToLower(), pos, height, mask, false);
-                pool.Add(name.ToLower(), obj);
+                comp.init(name, pos, height, mask, false);
+                pool.Add(name, obj);
             }
-            catch (Exception ex) {
+            catch {
                 UnityEngine.Object.Destroy(obj);
-                throw ex;
+                return null;
             }
             return comp;
         }

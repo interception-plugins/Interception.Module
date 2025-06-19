@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SDG.Unturned;
 
-namespace interception.server {
+namespace interception.process {
     internal class restart_component : MonoBehaviour {
         string kick_reason;
         int delay;
