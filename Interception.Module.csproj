@@ -89,6 +89,7 @@
     <Compile Include="enums\e_zone_type.cs" />
     <Compile Include="extensions\Color32.ex.cs" />
     <Compile Include="extensions\Color_ex.cs" />
+    <Compile Include="extensions\InteractableVehicle_ex.cs" />
     <Compile Include="extensions\Type_ex.cs" />
     <Compile Include="serialization\types\discord\s_embed.cs" />
     <Compile Include="serialization\types\discord\s_embed_thumbnail.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="utils\os_util.cs" />
     <Compile Include="utils\path_util.cs" />
     <Compile Include="utils\ui_util.cs" />
+    <Compile Include="utils\vehicle_util.cs" />
     <Compile Include="utils\webhook_util.cs" />
     <Compile Include="zones\distance_fast_zone_component.cs" />
     <Compile Include="zones\distance_slow_zone_component.cs" />

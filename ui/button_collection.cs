@@ -41,7 +41,7 @@ namespace interception.ui {
         }
 
         public override void show(bool reliable = true) {
-            if (!root.is_spawned)
+            if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             for (int i = 0; i < max_buttons; i++)
                 EffectManager.sendUIEffectVisibility(key, tc, reliable, get_path_of(i), true);
@@ -51,7 +51,7 @@ namespace interception.ui {
         }
 
         public override void hide(bool reliable = true) {
-            if (!root.is_spawned)
+            if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             for (int i = 0; i < max_buttons; i++)
                 EffectManager.sendUIEffectVisibility(key, tc, reliable, get_path_of(i), false);
@@ -65,7 +65,7 @@ namespace interception.ui {
         }
 
         public void show(int index, bool reliable = true) {
-            if (!root.is_spawned)
+            if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             if (index >= max_buttons)
                 throw new ArgumentOutOfRangeException($"index must be in range 0-{max_buttons}");
@@ -76,7 +76,7 @@ namespace interception.ui {
         }
 
         public void hide(int index, bool reliable = true) {
-            if (!root.is_spawned)
+            if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             if (index >= max_buttons)
                 throw new ArgumentOutOfRangeException($"index must be in range 0-{max_buttons}");

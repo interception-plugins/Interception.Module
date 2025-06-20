@@ -3,7 +3,7 @@
 using UnityEngine;
 
 namespace interception.time {
-    public class time_component : MonoBehaviour {
+    internal class time_component : MonoBehaviour {
         long last_time;
         byte seconds_passed1;
         short seconds_passed2;

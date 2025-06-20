@@ -15,7 +15,7 @@ namespace interception.ui {
         }
 
         public override void set_progress(int progress, bool reliable = true) {
-            if (!root.is_spawned)
+            if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             int old = this.progress;
             this.progress = math_util.clamp(progress, 0, max);

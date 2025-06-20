@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace interception.serialization.types {
+    // todo i guess
     [Serializable]
     [XmlType("dictionary")]
     public class xml_dictionary<T1, T2> {

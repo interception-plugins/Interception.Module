@@ -35,7 +35,7 @@ namespace interception.ui {
         }
 
         public override void show(bool reliable = true) {
-            if (!root.is_spawned)
+            if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
             _is_visible = true;
@@ -45,7 +45,7 @@ namespace interception.ui {
         }
 
         public override void hide(bool reliable = true) {
-            if (!root.is_spawned)
+            if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
             _is_visible = false;

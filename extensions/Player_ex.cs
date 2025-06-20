@@ -41,5 +41,9 @@ namespace interception.extensions {
         public static void say_to(this Player p, string text, string color, string icon = null, bool rich_text = true) {
             ChatManager.serverSendMessage(text, Palette.hex(color), null, p.channel.owner, EChatMode.SAY, icon, rich_text);
         }
+
+        public static void say_to(this Player p, string text, string icon = null, bool rich_text = true) {
+            ChatManager.serverSendMessage(text, Color.green, null, p.channel.owner, EChatMode.SAY, icon, rich_text);
+        }
     }
 }

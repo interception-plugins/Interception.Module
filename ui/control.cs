@@ -46,7 +46,8 @@ namespace interception.ui {
                 if (head is window)
                     return (window)head;
             }
-            throw new Exception($"somehow parent window for control {path} was not found 0_o");
+            //throw new Exception($"somehow parent window for control {path} was not found 0_o");
+            return null;
         }
 
         /*

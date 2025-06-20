@@ -73,6 +73,11 @@ namespace interception.discord.types {
             });
         }
 
+        // todo
+        //public static webhook deserialize_from_json_data(string data) {
+        //    return JsonConvert.DeserializeObject<webhook>(data);
+        //}
+
         public s_webhook serialize() {
             var wh = new s_webhook(username, avatar_url, content);
             var len = embeds.Count;
