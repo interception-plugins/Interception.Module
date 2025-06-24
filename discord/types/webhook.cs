@@ -73,10 +73,10 @@ namespace interception.discord.types {
             });
         }
 
-        // todo
-        //public static webhook deserialize_from_json_data(string data) {
-        //    return JsonConvert.DeserializeObject<webhook>(data);
-        //}
+        // todo i think it should be moved somewhere else
+        public static webhook deserialize_json_data(string data) {
+            return JsonConvert.DeserializeObject<webhook>(data);
+        }
 
         public s_webhook serialize() {
             var wh = new s_webhook(username, avatar_url, content);

@@ -13,8 +13,8 @@ namespace interception.ui {
     public delegate void on_progressbar_progress_changed_global_callback(int old_value, int new_value, progressbar pb);
     
     public delegate void on_button_collection_click_global_callback(int index, button_collection bc);
-    public delegate void on_button_collection_shown_global_callback(int index, button_collection bc);
-    public delegate void on_button_collection_hidden_global_callback(int index, button_collection bc);
+    public delegate void on_collection_element_shown_global_callback(int index, collection bc);
+    public delegate void on_collection_element_hidden_global_callback(int index, collection bc);
 
     public delegate void on_control_shown_global_callback(control c);
     public delegate void on_control_hidden_global_callback(control c);
@@ -28,8 +28,8 @@ namespace interception.ui {
         public static on_progressbar_progress_changed_global_callback on_progressbar_progress_changed_global;
 
         public static on_button_collection_click_global_callback on_button_collection_click_global;
-        public static on_button_collection_shown_global_callback on_button_collection_shown_global;
-        public static on_button_collection_hidden_global_callback on_button_collection_hidden_global;
+        public static on_collection_element_shown_global_callback on_collection_element_shown_global;
+        public static on_collection_element_hidden_global_callback on_collection_element_hidden_global;
 
         public static on_control_shown_global_callback on_control_shown_global;
         public static on_control_hidden_global_callback on_control_hidden_global;
@@ -66,7 +66,7 @@ namespace interception.ui {
                 on_textbox_text_changed_global(old_value, new_value, tb);
         }
 
-        internal static void trigger_on_progressbar_progress_changed(int old_value, int new_value, progressbar pb) {
+        internal static void trigger_on_progressbar_progress_changed_global(int old_value, int new_value, progressbar pb) {
             if (on_progressbar_progress_changed_global != null)
                 on_progressbar_progress_changed_global(old_value, new_value, pb);
         }
@@ -76,14 +76,14 @@ namespace interception.ui {
                 on_button_collection_click_global(index, bc);
         }
 
-        internal static void trigger_on_button_collection_shown_global(int index, button_collection bc) {
-            if (on_button_collection_shown_global != null)
-                on_button_collection_shown_global(index, bc);
+        internal static void trigger_on_collection_element_shown_global(int index, collection bc) {
+            if (on_collection_element_shown_global != null)
+                on_collection_element_shown_global(index, bc);
         }
 
-        internal static void trigger_on_button_collection_hidden_global(int index, button_collection bc) {
-            if (on_button_collection_hidden_global != null)
-                on_button_collection_hidden_global(index, bc);
+        internal static void trigger_on_collection_element_hidden_global(int index, collection bc) {
+            if (on_collection_element_hidden_global != null)
+                on_collection_element_hidden_global(index, bc);
         }
 
         internal static void trigger_on_control_shown_global(control c) {
@@ -140,7 +140,7 @@ namespace interception.ui {
             if (pool[tc].ContainsKey(bb) && (pool[tc][bb] is button_collection)) {
                 int index;
                 if (!int.TryParse(Regex.Replace(b, @"[^0-9]", string.Empty), out index)) return;
-                ((button_collection)pool[tc][bb]).click_any(index);
+                ((button_collection)pool[tc][bb]).element_click(index);
                 return;
             }
         }

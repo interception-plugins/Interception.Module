@@ -2,9 +2,9 @@ cron_manager.cs
 	better comparing
 
 ui
-	collection base class
-	collections
-	maybe rewrite something idk
+	move show/hide methods to control.cs
+	remove is_visible
+	remove visible_by_default
 
 hooking
 

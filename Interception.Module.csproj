@@ -126,6 +126,9 @@
     <Compile Include="main.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="process\restart_manager.cs" />
+    <Compile Include="ui\image_collection.cs" />
+    <Compile Include="ui\text_collection.cs" />
+    <Compile Include="ui\collection.cs" />
     <Compile Include="ui\button_collection.cs" />
     <Compile Include="ui\button.cs" />
     <Compile Include="ui\control.cs" />

@@ -4,7 +4,7 @@ using SDG.Unturned;
 using SDG.NetTransport;
 
 namespace interception.ui {
-    public class image : control {
+    public sealed class image : control {
         control _parent;
         public override control parent => _parent;
         short _key;
@@ -54,13 +54,9 @@ namespace interception.ui {
                 on_hidden();
             ui_manager.trigger_on_control_hidden_global(this);
         }
-
-        //public void set_image(string _url, bool reliable = true) {
-        //    EffectManager.sendUIEffectImageURL(key, tc, reliable, path, _url);
-        //}
         
         public void set_image(string _url, bool reliable = true, bool should_cache = true, bool force_refresh = false) {
-            if (!root.is_spawned)
+            if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectImageURL(key, tc, reliable, path, _url, should_cache, force_refresh);
             this._url = _url;

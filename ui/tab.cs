@@ -69,16 +69,24 @@ namespace interception.ui {
             return new textbox(this, key, tc, name);
         }
 
-        public text_progressbar add_text_progressbar(string name, int max_chars, char fill_char) {
-            return new text_progressbar(this, key, tc, name, max_chars, fill_char);
+        public text_progressbar add_text_progressbar(string name, char fill_char, int max_chars) {
+            return new text_progressbar(this, key, tc, name, fill_char, max_chars);
         }
 
-        public image_progressbar add_image_progressbar(string name, int max_children_count, string child_name_format) {
-            return new image_progressbar(this, key, tc, name, max_children_count, child_name_format);
+        public image_progressbar add_image_progressbar(string name, string child_name_format, int max_children_count) {
+            return new image_progressbar(this, key, tc, name, child_name_format, max_children_count);
         }
 
-        public button_collection add_button_collection(string name, int max_buttons, string suffix_format) {
-            return new button_collection(this, key, tc, name, max_buttons, suffix_format);
+        public text_collection add_text_collection(string name, string suffix_format, int max_elements) {
+            return new text_collection(this, key, tc, name, suffix_format, max_elements);
+        }
+
+        public image_collection add_image_collection(string name, string suffix_format, int max_elements) {
+            return new image_collection(this, key, tc, name, suffix_format, max_elements);
+        }
+
+        public button_collection add_button_collection(string name, string suffix_format, int max_elements) {
+            return new button_collection(this, key, tc, name, suffix_format, max_elements);
         }
     }
 }

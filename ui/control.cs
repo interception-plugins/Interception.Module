@@ -50,20 +50,6 @@ namespace interception.ui {
             return null;
         }
 
-        /*
-        protected window get_parent_window() {
-            if (this is window) 
-                return (window)this;
-            var head = this;
-            while (head != null) {
-                head = head.parent;
-                if (head is window)
-                    return (window)head;
-            }
-            throw new Exception($"somehow parent window for control {path} was not found 0_o");
-        }
-        */
-
         public control() {
             //controls = new List<control>();
         }

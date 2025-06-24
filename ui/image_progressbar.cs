@@ -9,8 +9,8 @@ namespace interception.ui {
     public sealed class image_progressbar : progressbar {
         string child_name_format;
 
-        public image_progressbar(control _parent, short _key, ITransportConnection _tc, string _name, int max_children_count, string child_name_format, bool _visible_by_default = true) 
-            : base(_parent, _key, _tc, _name, max_children_count, _visible_by_default) {
+        public image_progressbar(control _parent, short _key, ITransportConnection _tc, string _name, string child_name_format, int max_child_count, bool _visible_by_default = true) 
+            : base(_parent, _key, _tc, _name, max_child_count, _visible_by_default) {
             this.child_name_format = child_name_format;
         }
 
@@ -26,7 +26,7 @@ namespace interception.ui {
                 EffectManager.sendUIEffectVisibility(key, tc, reliable, $"{path}/{string.Format(child_name_format, i)}", false);
             if (on_progress_changed != null)
                 on_progress_changed(old, this.progress);
-            ui_manager.trigger_on_progressbar_progress_changed(old, this.progress, this);
+            ui_manager.trigger_on_progressbar_progress_changed_global(old, this.progress, this);
         }
     }
 }

@@ -97,7 +97,7 @@ namespace rocket_test {
             test_button2.on_click += delegate () {
                 text_progress_bar_test.decrement();
             };
-            text_progress_bar_test = main_tab.add_text_progressbar("Image/Image/text_progress_bar_test", 31, 'w');
+            text_progress_bar_test = main_tab.add_text_progressbar("Image/Image/text_progress_bar_test", 'w', 31);
             test_button3 = main_tab.add_button("test_button3");
             test_button3.on_click += delegate () {
                 image_progress_bar_test.increment();
@@ -106,7 +106,7 @@ namespace rocket_test {
             test_button4.on_click += delegate () {
                 image_progress_bar_test.decrement();
             };
-            image_progress_bar_test = main_tab.add_image_progressbar("image_progress_bar_test", 19, "image_progress_bar_{0}");
+            image_progress_bar_test = main_tab.add_image_progressbar("image_progress_bar_test", "image_progress_bar_{0}", 19);
             test_tab = main_tab.add_tab("test_tab");
             test_button5 = test_tab.add_button("test_button5");
             test_button5.on_click += delegate () {
@@ -131,18 +131,18 @@ namespace rocket_test {
                 ui_util.disable_blur(base.Player.Player);
             };
             scroll_test = main_tab.add_tab("Scroll View/Viewport/Content");
-            scroll_button_test = scroll_test.add_button_collection("scroll_button_test", 50, "_{0}");
-            scroll_button_test.on_click_any += delegate (int index) {
+            scroll_button_test = scroll_test.add_button_collection("scroll_button_test", "_{0}", 50);
+            scroll_button_test.on_element_click += delegate (int index) {
                 scroll_button_test.hide(index);
             };
-            scroll_button_test.on_hidden_any += delegate (int index) {
+            scroll_button_test.on_element_hidden += delegate (int index) {
                 Console.WriteLine($"button was hiiden in collection: {index}");
             };
         }
 
         public void enable_ui() {
             canvas.spawn();
-            //ui_util.enable_cursor(base.Player.Player);
+            ui_util.enable_cursor(base.Player.Player);
             ui_util.enable_blur(base.Player.Player);
             test_text.set_text($"this text was changed by a plugin: {System.Reflection.Assembly.GetExecutingAssembly().FullName}");
         }
