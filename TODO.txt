@@ -5,6 +5,7 @@ ui
 	move show/hide methods to control.cs
 	remove is_visible
 	remove visible_by_default
+	make window.is_spawned public
 
 hooking
 

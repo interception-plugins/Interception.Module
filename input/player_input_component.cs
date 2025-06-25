@@ -17,7 +17,7 @@ namespace interception.input {
         public on_key_down_callback on_key_down;
         public on_key_up_callback on_key_up;
 
-        public void init(Player player) {
+        internal void init(Player player) {
             this.player = player;
             last_key_states = new bool[input_util.DEFAULT_KEYS + ControlsSettings.NUM_PLUGIN_KEYS];
         }
