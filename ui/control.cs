@@ -13,9 +13,6 @@ namespace interception.ui {
         internal abstract ITransportConnection tc { get; }
         public abstract string name { get; }
         public abstract string path { get; }
-        [Obsolete("this property cannot be properly synced so it shouldn't be used")]
-        public abstract bool is_visible { get; }
-        protected virtual bool visible_by_default { get; }
         public abstract void show(bool reliable);
         public abstract void hide(bool reliable);
         protected virtual void on_spawn() { }

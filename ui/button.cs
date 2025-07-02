@@ -17,19 +17,16 @@ namespace interception.ui {
         public override string name => _name;
         string _path;
         public override string path => _path;
-        bool _is_visible;
-        public override bool is_visible => _is_visible;
         window root;
 
         public on_button_click_callback on_click;
 
-        public button(control _parent, short _key, ITransportConnection _tc, string _name, bool _visible_by_default = true) : base() {
+        public button(control _parent, short _key, ITransportConnection _tc, string _name) : base() {
             this._parent = _parent;
             this._key = _key;
             this._tc = _tc;
             this._name = _name;
             this._path = make_path();
-            this._is_visible = _visible_by_default;
             this.root = get_root_window();
             ui_manager.add_control(this);
         }
@@ -38,7 +35,6 @@ namespace interception.ui {
             if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
-            _is_visible = true;
             if (on_shown != null)
                 on_shown();
             ui_manager.trigger_on_control_shown_global(this);
@@ -48,7 +44,6 @@ namespace interception.ui {
             if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
-            _is_visible = false;
             if (on_hidden != null)
                 on_hidden();
             ui_manager.trigger_on_control_hidden_global(this);

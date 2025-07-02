@@ -106,7 +106,7 @@ namespace interception.zones {
             pool.Remove(name);
         }
 
-        public static void debug_all_zones() {
+        public static void toggle_debug_mode() {
             var len = pool.Count;
             if (!debug_mode) {
                 for (int i = 0; i < len; i++) {

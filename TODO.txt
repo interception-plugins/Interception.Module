@@ -3,9 +3,12 @@ cron_manager.cs
 
 ui
 	move show/hide methods to control.cs
-	remove is_visible
-	remove visible_by_default
-	make window.is_spawned public
+
+discord
+	get rid of add_* methods & use properties
+
+Type_ex.cs
+	change args order?
 
 hooking
 

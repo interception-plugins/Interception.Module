@@ -5,6 +5,7 @@ using SDG.Unturned;
 using SDG.NetTransport;
 
 namespace interception.ui {
+    [Obsolete("not sure if i'll keep it in future versions as it not working as intended")]
     public sealed class image_collection : collection {
         Dictionary<int, string> urls;
 

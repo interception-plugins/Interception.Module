@@ -9,8 +9,8 @@ namespace interception.ui {
     public sealed class text_progressbar : progressbar {
         char fill_char;
 
-        public text_progressbar(control _parent, short _key, ITransportConnection _tc, string _name, char fill_char, int max_chars, bool _visible_by_default = true) 
-            : base(_parent, _key, _tc, _name, max_chars, _visible_by_default) {
+        public text_progressbar(control _parent, short _key, ITransportConnection _tc, string _name, char fill_char, int max_chars) 
+            : base(_parent, _key, _tc, _name, max_chars) {
             this.fill_char = fill_char;
         }
 

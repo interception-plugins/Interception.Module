@@ -18,7 +18,6 @@ namespace interception.ui {
         public override string name => _name;
         string _path;
         public override string path => _path;
-        public override bool is_visible => true;
         protected window root;
         public string _suffix_format;
         public string suffix_format => _suffix_format;
