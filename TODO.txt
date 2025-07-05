@@ -10,6 +10,4 @@ discord
 Type_ex.cs
 	change args order?
 
-hooking
-
 documentation (ReadTheDocs)

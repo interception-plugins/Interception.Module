@@ -90,8 +90,10 @@ namespace interception.zones {
                 on_zone_enter(p);
             zone_manager.trigger_on_zone_enter_global(p, this);
 
-            if (zone_manager.debug_mode)
+            if (zone_manager.debug_mode) {
                 CommandWindow.Log($"[+] zone enter ({gameObject.name}): {p.channel.owner.playerID.characterName}");
+                ChatManager.serverSendMessage($"zone enter ({gameObject.name})", Color.magenta, null, p.channel.owner);
+            }
         }
 
         internal void OnTriggerExit(Collider other) {
@@ -105,8 +107,10 @@ namespace interception.zones {
                 on_zone_exit(p);
             zone_manager.trigger_on_zone_exit_global(p, this);
 
-            if (zone_manager.debug_mode)
+            if (zone_manager.debug_mode) {
                 CommandWindow.Log($"[-] zone exit ({gameObject.name}): {p.channel.owner.playerID.characterName}");
+                ChatManager.serverSendMessage($"zone exit ({gameObject.name})", Color.magenta, null, p.channel.owner);
+            }
         }
     }
 }
