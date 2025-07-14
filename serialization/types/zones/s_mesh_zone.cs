@@ -9,7 +9,7 @@ namespace interception.serialization.types.zones {
     public class s_mesh_zone : s_zone {
         [XmlAttribute]
         public float height { get; set; }
-        [XmlAttribute]
+        [XmlElement(IsNullable = true)]
         public int? mask { get; set; }
 
         public s_mesh_zone() { }
