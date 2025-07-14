@@ -54,18 +54,18 @@ namespace rocket_test {
 
         public void init() {
             hook_manager.create_hook<askTire_def>(base.askTire, askTire_hk);
-            hook_manager.create_hook<askRest_def>(typeof(SDG.Unturned.PlayerLife), "askRest", null, askRest_hk, 0);
+            hook_manager.create_hook<askRest_def>(typeof(SDG.Unturned.PlayerLife), "askRest", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance, askRest_hk, 0);
         }
 
         public void enable() {
             hook_manager.enable_hook<askTire_def>(askTire_hk);
-            hook_manager.enable_hook<askTire_def>(askRest_hk);
+            hook_manager.enable_hook<askRest_def>(askRest_hk);
 
         }
 
         public void disable() {
             hook_manager.disable_hook<askTire_def>(askTire_hk);
-            hook_manager.disable_hook<askTire_def>(askRest_hk);
+            hook_manager.disable_hook<askRest_def>(askRest_hk);
         }
     }
     
@@ -86,6 +86,10 @@ namespace rocket_test {
             PlayerLife_hk hk = new PlayerLife_hk();
             hk.init();
             hk.enable();
+            var types = typeof(SDG.Unturned.Provider).Assembly.GetTypes();
+            for (int i = 0; i < types.Length; i++)
+                if (types[i].FullName.Contains("NetMessages") && types[i].FullName == "SDG.Unturned.NetMessages") 
+                    Console.WriteLine(types[i].FullName);
         }
 
         protected override void Unload() {

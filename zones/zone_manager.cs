@@ -15,7 +15,15 @@ namespace interception.zones {
         public static on_zone_enter_global_callback on_zone_enter_global;
         public static on_zone_exit_global_callback on_zone_exit_global;
 
-        internal static bool debug_mode = false;
+        static bool _debug_mode = false;
+        public static bool debug_mode {
+            get {
+                return _debug_mode;
+            }
+            private set {
+                _debug_mode = value;
+            }
+        }
 
         internal static readonly Dictionary<RegionCoordinate, Dictionary<ulong, Player>> regions_to_check = new Dictionary<RegionCoordinate, Dictionary<ulong, Player>>();
 

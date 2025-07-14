@@ -6,7 +6,12 @@ using interception.enums;
 namespace interception.serialization.types.zones {
     [Serializable]
     [XmlType("zone")]
-    public class s_zone {
+    [XmlInclude(typeof(s_box_zone))]
+    [XmlInclude(typeof(s_sphere_zone))]
+    [XmlInclude(typeof(s_mesh_zone))]
+    [XmlInclude(typeof(s_distance_fast_zone))]
+    [XmlInclude(typeof(s_distance_slow_zone))]
+    public abstract class s_zone {
         [XmlAttribute]
         public e_zone_type type { get; set; }
         [XmlAttribute]

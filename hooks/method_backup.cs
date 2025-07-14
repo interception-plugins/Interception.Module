@@ -32,6 +32,4 @@ namespace interception.hooks {
             }
         }
     }
-
-    public class hookAttribute : System.Attribute { }
 }
