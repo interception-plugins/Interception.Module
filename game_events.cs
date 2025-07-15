@@ -14,7 +14,12 @@ using interception.time;
 using interception.ui;
 
 namespace interception {
-    internal static class game_events {
+    public delegate void on_player_teleported_global_callback(Player player, Vector3 point);
+    public delegate void on_player_seated_global_callback(Player player, Vector3 point);
+
+    public static class game_events {
+        public static on_player_teleported_global_callback on_player_teleported_global;
+
         static void on_effect_button_clicked(Player p, string b) {
             ui_manager.on_effect_button_clicked(p.channel.owner.transportConnection, b);
         }
@@ -36,11 +41,17 @@ namespace interception {
 
         }
 
+        static void on_player_teleported(Player player, Vector3 point) {
+            if (on_player_teleported_global != null)
+                on_player_teleported_global(player, point);
+        }
+
         static void on_server_connected(CSteamID csid) {
             Player p = PlayerTool.getPlayer(csid);
             if (p == null) return;
             p.gameObject.AddComponent<player_input_component>().init(p);
             p.movement.onRegionUpdated += on_region_updated;
+            p.onPlayerTeleported += on_player_teleported;
             ui_manager.add_player(p.channel.owner.transportConnection);
         }
 
@@ -56,6 +67,7 @@ namespace interception {
             if (zone_manager.regions_to_check.ContainsKey(coords))
                 if (zone_manager.regions_to_check[coords].ContainsKey(p.channel.owner.playerID.steamID.m_SteamID))
                     zone_manager.regions_to_check[coords].Remove(p.channel.owner.playerID.steamID.m_SteamID);
+            p.onPlayerTeleported -= on_player_teleported;
             p.movement.onRegionUpdated -= on_region_updated;
             ui_manager.remove_player(p.channel.owner.transportConnection);
         }
@@ -64,7 +76,7 @@ namespace interception {
             main.instance.module_game_object.AddComponent<time_component>();
         }
 
-        public static void init() {
+        internal static void init() {
             Provider.onServerConnected += on_server_connected;
             //Player.onPlayerCreated += on_player_created;
             Provider.onServerDisconnected += on_server_disconnected;
@@ -73,7 +85,7 @@ namespace interception {
             EffectManager.onEffectTextCommitted += on_effect_input_commited;
         }
 
-        public static void uninit() {
+        internal static void uninit() {
             EffectManager.onEffectTextCommitted -= on_effect_input_commited;
             EffectManager.onEffectButtonClicked -= on_effect_button_clicked;
             Level.onPostLevelLoaded -= on_post_level_loaded;

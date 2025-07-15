@@ -45,45 +45,19 @@ namespace interception.zones {
 
         void on_server_disconnected(CSteamID csid) {
             var p = PlayerTool.getPlayer(csid);
-            if (p == null || !players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
-            players.Remove(p.channel.owner.playerID.steamID.m_SteamID);
-            if (on_zone_exit != null)
-                on_zone_exit(p);
-            zone_manager.trigger_on_zone_exit_global(p, this);
-            if (zone_manager.debug_mode)
-                Console.WriteLine($"zone exit ({gameObject.name}): {p.channel.owner.playerID.characterName}");
+            zone_exit(p);
         }
 
         void on_player_died(PlayerLife pl, EDeathCause cause, ELimb limb, CSteamID instigator) {
-            if (!players.ContainsKey(pl.player.channel.owner.playerID.steamID.m_SteamID)) return;
-            players.Remove(pl.player.channel.owner.playerID.steamID.m_SteamID);
-            if (on_zone_exit != null)
-                on_zone_exit(pl.player);
-            zone_manager.trigger_on_zone_exit_global(pl.player, this);
-            if (zone_manager.debug_mode)
-                Console.WriteLine($"zone exit ({gameObject.name}): {pl.player.channel.owner.playerID.characterName}");
-
+            zone_exit(pl.player);
         }
 
-        public void init() {
-            Provider.onServerDisconnected += on_server_disconnected;
-            PlayerLife.onPlayerDied += on_player_died;
-            if (zone_manager.debug_mode)
-                enable_debug();
+        void on_player_teleported(Player p, Vector3 pos) {
+            zone_exit(p); // todo?
         }
 
-        void OnDestroy() {
-            PlayerLife.onPlayerDied -= on_player_died;
-            Provider.onServerDisconnected -= on_server_disconnected;
-            on_zone_enter = null;
-            on_zone_exit = null;
-        }
-
-        internal void OnTriggerEnter(Collider other) {
-            if (other == null || !other.CompareTag("Player")) return;
-
-            var p = other.gameObject.GetComponent<Player>();
-            if (players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
+        protected void zone_enter(Player p) {
+            if (p == null || players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
             players.Add(p.channel.owner.playerID.steamID.m_SteamID, p);
 
             if (on_zone_enter != null)
@@ -96,11 +70,8 @@ namespace interception.zones {
             }
         }
 
-        internal void OnTriggerExit(Collider other) {
-            if (other == null || !other.CompareTag("Player")) return;
-
-            var p = other.gameObject.GetComponent<Player>();
-            if (!players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
+        protected void zone_exit(Player p) {
+            if (p == null || !players.ContainsKey(p.channel.owner.playerID.steamID.m_SteamID)) return;
             players.Remove(p.channel.owner.playerID.steamID.m_SteamID);
 
             if (on_zone_exit != null)
@@ -110,6 +81,63 @@ namespace interception.zones {
             if (zone_manager.debug_mode) {
                 CommandWindow.Log($"[-] zone exit ({gameObject.name}): {p.channel.owner.playerID.characterName}");
                 ChatManager.serverSendMessage($"zone exit ({gameObject.name})", Color.magenta, null, p.channel.owner);
+            }
+        }
+
+        public void init() {
+            Provider.onServerDisconnected += on_server_disconnected;
+            PlayerLife.onPlayerDied += on_player_died;
+            game_events.on_player_teleported_global += on_player_teleported;
+            if (zone_manager.debug_mode)
+                enable_debug();
+        }
+
+        void OnDisable() {
+            game_events.on_player_teleported_global -= on_player_teleported;
+            PlayerLife.onPlayerDied -= on_player_died;
+            Provider.onServerDisconnected -= on_server_disconnected;
+            on_zone_enter = null;
+            on_zone_exit = null;
+        }
+
+        internal void OnTriggerEnter(Collider other) {
+            if (other == null) return;
+            if (other.CompareTag("Player")) {
+                zone_enter(other.gameObject.GetComponent<Player>());
+            }
+            else if (other.CompareTag("Vehicle")) {
+                var v = other.gameObject.GetComponent<InteractableVehicle>();
+                var len = v != null && v.passengers != null ? v.passengers.Length : 0;
+                for (int i = 0; i < len; i++)
+                    if (v.passengers[i].player != null)
+                        zone_enter(v.passengers[i].player.player);
+
+                /*
+                var comps =  other.gameObject.GetComponentsInChildren<Player>(false);
+                var len = comps.Length;
+                for (int i = 0; i < len; i++)
+                    zone_enter(comps[i]);
+                */
+            }
+        }
+
+        internal void OnTriggerExit(Collider other) {
+            if (other == null) return;
+            if (other.CompareTag("Player")) {
+                zone_exit(other.gameObject.GetComponent<Player>());
+            }
+            else if (other.CompareTag("Vehicle")) {
+                var v = other.gameObject.GetComponent<InteractableVehicle>();
+                var len = v != null && v.passengers != null ? v.passengers.Length : 0;
+                for (int i = 0; i < len; i++)
+                    if (v.passengers[i].player != null)
+                        zone_exit(v.passengers[i].player.player);
+                /*
+                var comps =  other.gameObject.GetComponentsInChildren<Player>(false);
+                var len = comps.Length;
+                for (int i = 0; i < len; i++)
+                    zone_exit(comps[i]);
+                */
             }
         }
     }

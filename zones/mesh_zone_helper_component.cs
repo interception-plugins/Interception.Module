@@ -22,12 +22,12 @@ namespace interception.zones {
 		}
 
 		void OnTriggerEnter(Collider other) {
-			if (other == null || !other.CompareTag("Player")) return;
+			if (other == null || (!other.CompareTag("Player") && !other.CompareTag("Vehicle"))) return;
 			parent_component.OnTriggerEnter(other);
 		}
 
 		void OnTriggerExit(Collider other) {
-			if (other == null || !other.CompareTag("Player")) return;
+			if (other == null || (!other.CompareTag("Player") && !other.CompareTag("Vehicle"))) return;
 			parent_component.OnTriggerExit(other);
 		}
 	}
