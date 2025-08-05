@@ -8,6 +8,9 @@ namespace interception.zones {
 	public sealed class sphere_zone_component : zone_component {
 		SphereCollider collider;
 
+		public Bounds bounds => collider.bounds;
+		public float radius => collider.radius;
+
 		public void init(string name, Vector3 pos, float radius) {
 			gameObject.name = name;
 			gameObject.transform.position = pos;

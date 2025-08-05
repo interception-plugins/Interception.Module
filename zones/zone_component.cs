@@ -17,6 +17,8 @@ namespace interception.zones {
         //    Destroy(gameObject);
         //}
 
+        public Vector3 position => gameObject.transform.position;
+
         public on_zone_enter_callback on_zone_enter;
         public on_zone_exit_callback on_zone_exit;
 

@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
 namespace interception.hooks {
     public static class hook_manager {
         internal static readonly Dictionary<IntPtr, hook> hooks = new Dictionary<IntPtr, hook>();
+
+        internal static void unhook_all() {
+            var len = hooks.Count;
+            for (int i = 0; i < len; i++) {
+                var hk = hooks.ElementAt(i).Value;
+                if (hk.is_enabled) 
+                    hk.disable();
+            }
+            hooks.Clear();
+        }
 
         public static void create_hook(MethodInfo method, MethodInfo hook_callback) {
             var original_handle = method.MethodHandle;

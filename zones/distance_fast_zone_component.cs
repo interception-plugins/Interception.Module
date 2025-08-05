@@ -7,7 +7,16 @@ using SDG.Unturned;
 namespace interception.zones {
 	public sealed class distance_fast_zone_component : zone_component {
 		DateTime last_upd;
-		float radius;
+		float _radius;
+		public float radius {
+			get {
+				return _radius;
+            }
+			private set {
+				_radius = value;
+            }
+        }
+
 		List<RegionCoordinate> coords;
 
 		public void init(string name, Vector3 pos, float radius) {
