@@ -162,6 +162,18 @@ namespace interception.zones {
             return pool[name].GetComponent<zone_component>().get_players();
         }
 
+        public static bool is_position_in_zone(string name, Vector3 pos) {
+            if (!pool.ContainsKey(name))
+                throw new ArgumentException($"zone with name {name} does not exist");
+            return pool[name].GetComponent<zone_component>().is_position_in_zone(pos);
+        }
+
+        public static bool is_transform_in_zone(string name, Transform t) {
+            if (!pool.ContainsKey(name))
+                throw new ArgumentException($"zone with name {name} does not exist");
+            return pool[name].GetComponent<zone_component>().is_transform_in_zone(t);
+        }
+
         public static bool is_zone_exist(string name) {
             return pool.ContainsKey(name);
         }

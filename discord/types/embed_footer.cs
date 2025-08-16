@@ -6,8 +6,8 @@ namespace interception.discord.types {
         public string icon_url { get; private set; }
 
         public embed_footer(string text, string icon_url) {
-            if (text.Length > 2048)
-                throw new ArgumentOutOfRangeException("footer.text length must be less or equal 2048");
+            if (text.Length > constants.EMBED_FOOTER_TEXT_MAX_LEN)
+                throw new ArgumentOutOfRangeException($"footer.text length must be less or equal {constants.EMBED_FOOTER_TEXT_MAX_LEN}");
             this.text = text;
             if (icon_url != null && !icon_url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !icon_url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException($"passed parameter is not a url (\"{icon_url}\")");

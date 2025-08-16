@@ -1,9 +1,9 @@
 ﻿using System;
 
+using UnityEngine;
+
 using SDG.Unturned;
 using SDG.NetTransport;
-
-using interception.utils;
 
 namespace interception.ui {
     public sealed class image_progressbar : progressbar {
@@ -18,7 +18,7 @@ namespace interception.ui {
             if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             int old = this.progress;
-            this.progress = math_util.clamp(progress, 0, max);
+            this.progress = Mathf.Clamp(progress, 0, max);
             int i = 0;
             for (; i < progress; i++)
                 EffectManager.sendUIEffectVisibility(key, tc, reliable, $"{path}/{string.Format(child_name_format, i)}", true);

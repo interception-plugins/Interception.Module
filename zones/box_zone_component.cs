@@ -39,5 +39,13 @@ namespace interception.zones {
 			}
 		}
 #pragma warning restore CS0618
+
+        public override bool is_position_in_zone(Vector3 pos) {
+            return bounds.Contains(pos);
+        }
+
+		public override bool is_transform_in_zone(Transform t) {
+			return bounds.Contains(t.position);
+		}
 	}
 }

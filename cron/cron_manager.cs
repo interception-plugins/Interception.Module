@@ -29,7 +29,7 @@ namespace interception.cron {
                 if (DateTime.UtcNow.ToUniversalTime().ToString("HH:mm:ss") == events[i].execution_time.ToUniversalTime().ToString("HH:mm:ss")) { // todo better comparing
                     events[i].execute();
                     if (events[i].trigger_once)
-                        unregister_event(events[i].name);
+                        pool.Remove(events[i].name);
                 }
             }
         }

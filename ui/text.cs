@@ -34,24 +34,6 @@ namespace interception.ui {
             }
         }
 
-        public override void show(bool reliable = true) {
-            if (root != null && !root.is_spawned)
-                throw new Exception("root window is despawned");
-            EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
-            if (on_shown != null)
-                on_shown();
-            ui_manager.trigger_on_control_shown_global(this);
-        }
-
-        public override void hide(bool reliable = true) {
-            if (root != null && !root.is_spawned)
-                throw new Exception("root window is despawned");
-            EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
-            if (on_hidden != null)
-                on_hidden();
-            ui_manager.trigger_on_control_hidden_global(this);
-        }
-
         public void set_text(string _text, bool reliable = true) {
             if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");

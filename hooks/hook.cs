@@ -40,7 +40,7 @@ namespace interception.hooks {
                 }
             }
             catch (Exception ex) {
-                throw new Exception($"failed to enable hook 0x{hook_ptr.ToString("X2")} for method \"{original_method.Name}\", exception:\n{ex.ToString()}");
+                throw new Exception($"failed to enable hook 0x{hook_ptr.ToString("X2")} for method \"{original_method.Name}\"", ex);
             }
             is_enabled = true;
         }
@@ -64,7 +64,7 @@ namespace interception.hooks {
                 }
             }
             catch (Exception ex) {
-                throw new Exception($"failed to disable hook 0x{hook_ptr.ToString("X2")} for method \"{original_method.Name}\", exception:\n{ex.ToString()}");
+                throw new Exception($"failed to disable hook 0x{hook_ptr.ToString("X2")} for method \"{original_method.Name}\"", ex);
             }
             is_enabled = false;
         }

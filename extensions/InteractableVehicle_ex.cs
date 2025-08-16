@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Steamworks;
 using SDG.Unturned;
 
 namespace interception.extensions {
@@ -15,6 +16,10 @@ namespace interception.extensions {
                     if (v.turrets[i] != null && v.turrets[i].player != null) result++;
             }*/
             return result;
+        }
+
+        public static void toggle_lock(this InteractableVehicle v, CSteamID owner, CSteamID group, bool is_locked) {
+            VehicleManager.ServerSetVehicleLock(v, owner, group, is_locked);
         }
     }
 }

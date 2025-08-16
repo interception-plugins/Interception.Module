@@ -10,7 +10,7 @@ namespace interception.zones {
     public delegate void on_zone_enter_callback(Player player);
     public delegate void on_zone_exit_callback(Player player);
 
-    public class zone_component : MonoBehaviour {
+    public abstract class zone_component : MonoBehaviour {
         protected Coroutine debug_routine;
 
         //public virtual void destroy() {
@@ -41,6 +41,9 @@ namespace interception.zones {
             StopCoroutine(debug_routine);
             debug_routine = null;
         }
+
+        public abstract bool is_position_in_zone(Vector3 pos);
+        public abstract bool is_transform_in_zone(Transform t);
 
         protected readonly Dictionary<ulong, Player> players = new Dictionary<ulong, Player>();
         public virtual List<Player> get_players() => players.Values.ToList();

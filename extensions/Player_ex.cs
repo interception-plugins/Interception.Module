@@ -3,6 +3,7 @@
 using UnityEngine;
 using Steamworks;
 using SDG.Unturned;
+using SDG.NetTransport;
 
 namespace interception.extensions {
     public static class Player_ex {
@@ -20,6 +21,10 @@ namespace interception.extensions {
 
         public static string get_steam_name(this Player p) {
             return p.channel.owner.playerID.playerName;
+        }
+
+        public static ITransportConnection get_transport_connection(this Player p) {
+            return p.channel.owner.transportConnection;
         }
 
         public static void mute_voice(this Player p) {

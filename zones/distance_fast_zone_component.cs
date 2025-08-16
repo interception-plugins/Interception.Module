@@ -52,6 +52,14 @@ namespace interception.zones {
 		}
 #pragma warning restore CS0618
 
+		public override bool is_position_in_zone(Vector3 pos) {
+			return (gameObject.transform.position - pos).sqrMagnitude <= radius * radius;
+		}
+
+		public override bool is_transform_in_zone(Transform t) {
+			return (gameObject.transform.position - t.position).sqrMagnitude <= radius * radius;
+		}
+
 		void Update() {
 			if ((DateTime.UtcNow - last_upd).TotalMilliseconds < 250) return;
 			var len = coords.Count;

@@ -71,5 +71,28 @@ namespace interception.zones {
 			}
 		}
 #pragma warning restore CS0618
+
+		static Vector3 mul(Vector3 v1, Vector3 v2) {
+			Vector3 result = v1;
+			result.x *= v2.x;
+			result.y *= v2.y;
+			result.z *= v2.z;
+			return result;
+		}
+
+		// todo im pretty sure its wrong
+		// also maybe simply calling bounds.Contains will work, i dunno
+		public override bool is_position_in_zone(Vector3 pos) {
+			var len = collider.sharedMesh.vertices.Length;
+			for (int i = 0; i < len; i++) {
+				if (Math.Asin(Vector3.Dot(collider.sharedMesh.vertices[i].normalized,
+					Vector3.Normalize(mul(collider.sharedMesh.vertices[i], gameObject.transform.position) - pos))) <= 0.0) return false;
+			}
+			return true;
+		}
+
+		public override bool is_transform_in_zone(Transform t) {
+			return is_position_in_zone(t.position);
+		}
 	}
 }

@@ -87,5 +87,25 @@ namespace interception.hooks {
             hooks[hook_callback.MethodHandle.GetFunctionPointer()].original_method.Invoke(instance, args);
             hooks[hook_callback.MethodHandle.GetFunctionPointer()].enable();
         }
+
+        public static unsafe bool is_method_hooked(MethodInfo method) {
+            var func_ptr = method.MethodHandle.GetFunctionPointer();
+            try {
+                byte* ptr = (byte*)func_ptr.ToPointer();
+                if (IntPtr.Size == 8) {
+                    return (*ptr == 0x48 && ptr[1] == 0xB8 && ptr[10] == 0xFF && ptr[11] == 0xE0);
+                }
+                else {
+                    return (*ptr == 0x68 && ptr[5] == 0xC3);
+                }
+            }
+            catch (Exception ex) {
+                throw new Exception($"failed to check if method \"{method.Name}\" was hooked", ex);
+            }
+        }
+
+        public static unsafe bool is_method_hooked<T>(T method) where T : Delegate {
+            return is_method_hooked(method.GetMethodInfo());
+        }
     }
 }

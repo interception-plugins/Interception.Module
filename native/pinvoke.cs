@@ -3,8 +3,8 @@ using System.Runtime.InteropServices;
 
 using interception.utils;
 
-namespace interception.notsafe {
-    public static class native {
+namespace interception.native {
+    public static class pinvoke {
         [DllImport("kernel32.dll")]
         static extern IntPtr LoadLibrary(string filename);
 

@@ -136,7 +136,7 @@ namespace interception.ui {
                 ((button)pool[tc][b]).click();
                 return;
             }
-            string bb = Regex.Replace(b, @"[0-9]{1,}", "{{INDEX}}"); // todo should replace digits once?
+            string bb = Regex.Replace(b, @"[0-9]${1,}", "{{INDEX}}");
             if (pool[tc].ContainsKey(bb) && (pool[tc][bb] is button_collection)) {
                 int index;
                 if (!int.TryParse(Regex.Replace(b, @"[^0-9]", string.Empty), out index)) return;

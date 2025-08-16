@@ -77,6 +77,7 @@
   <ItemGroup>
     <Compile Include="cron\cron_event.cs" />
     <Compile Include="cron\cron_manager.cs" />
+    <Compile Include="discord\constants.cs" />
     <Compile Include="discord\types\embed.cs" />
     <Compile Include="discord\types\embed_footer.cs" />
     <Compile Include="discord\types\embed_field.cs" />
@@ -89,10 +90,9 @@
     <Compile Include="enums\e_file_attachment_type.cs" />
     <Compile Include="enums\e_webhook_flag.cs" />
     <Compile Include="enums\e_zone_type.cs" />
-    <Compile Include="extensions\Color32.ex.cs" />
+    <Compile Include="extensions\Color32_ex.cs" />
     <Compile Include="extensions\Color_ex.cs" />
     <Compile Include="extensions\InteractableVehicle_ex.cs" />
-    <Compile Include="extensions\Type_ex.cs" />
     <Compile Include="hooks\hook.cs" />
     <Compile Include="hooks\hook_manager.cs" />
     <Compile Include="hooks\method_backup.cs" />
@@ -104,7 +104,6 @@
     <Compile Include="serialization\types\discord\s_embed_author.cs" />
     <Compile Include="serialization\types\discord\s_file_attachment.cs" />
     <Compile Include="serialization\types\discord\s_webhook.cs" />
-    <Compile Include="serialization\types\xml_dictionary.cs" />
     <Compile Include="serialization\types\xml_pair.cs" />
     <Compile Include="serialization\types\s_color32.cs" />
     <Compile Include="serialization\types\s_color.cs" />
@@ -118,7 +117,7 @@
     <Compile Include="game_events.cs" />
     <Compile Include="input\input_manager.cs" />
     <Compile Include="input\player_input_component.cs" />
-    <Compile Include="notsafe\native.cs" />
+    <Compile Include="native\pinvoke.cs" />
     <Compile Include="serialization\types\zones\s_distance_fast_zone.cs" />
     <Compile Include="serialization\types\zones\s_distance_slow_zone.cs" />
     <Compile Include="serialization\types\zones\s_box_zone.cs" />
@@ -149,7 +148,6 @@
     <Compile Include="utils\chat_util.cs" />
     <Compile Include="utils\collider_util.cs" />
     <Compile Include="utils\input_util.cs" />
-    <Compile Include="utils\math_util.cs" />
     <Compile Include="utils\os_util.cs" />
     <Compile Include="utils\path_util.cs" />
     <Compile Include="utils\ui_util.cs" />

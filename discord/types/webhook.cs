@@ -18,52 +18,52 @@ namespace interception.discord.types {
         public List<file_attachment> files { get; private set; }
 
         public webhook(string username, string avatar_url, string content, e_webhook_flag flags = 0) {
-            if (username != null && (username.Length == 0 || username.Length > 80))
-                throw new ArgumentOutOfRangeException("username length must be in range 1-80");
+            if (username != null && (username.Length == 0 || username.Length > constants.WEBHOOK_USERNAME_MAX_LEN))
+                throw new ArgumentOutOfRangeException($"username length must be in range 1-{constants.WEBHOOK_USERNAME_MAX_LEN}");
             this.username = username;
             if (avatar_url != null && !avatar_url.StartsWith("http://", StringComparison.OrdinalIgnoreCase) && !avatar_url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException($"passed parameter is not a url (\"{avatar_url}\")");
             this.avatar_url = avatar_url;
-            if (content != null && content.Length > 2000)
-                throw new ArgumentOutOfRangeException("content length must be less or equal 2000");
+            if (content != null && content.Length > constants.WEBHOOK_CONTENT_MAX_LEN)
+                throw new ArgumentOutOfRangeException($"content length must be less or equal {constants.WEBHOOK_CONTENT_MAX_LEN}");
             this.content = content;
-            this.embeds = new List<embed>(10);
+            this.embeds = new List<embed>(constants.WEBHOOK_MAX_EMBEDS);
             this.flags = flags;
-            this.files = new List<file_attachment>(10);
+            this.files = new List<file_attachment>(constants.WEBHOOK_MAX_FILES);
         }
 
         public void add_embed(embed _embed) {
-            if (embeds.Count >= 10)
-                throw new ArgumentOutOfRangeException("cannot add more than 10 embeds");
+            if (embeds.Count >= constants.WEBHOOK_MAX_EMBEDS)
+                throw new ArgumentOutOfRangeException($"cannot add more than {constants.WEBHOOK_MAX_EMBEDS} embeds");
             embeds.Add(_embed);
         }
 
         public void add_file(string filename) {
-            if (files.Count >= 10)
-                throw new ArgumentOutOfRangeException("cannot add more than 10 files");
+            if (files.Count >= constants.WEBHOOK_MAX_FILES)
+                throw new ArgumentOutOfRangeException($"cannot add more than {constants.WEBHOOK_MAX_FILES} files");
             if (!File.Exists(filename))
                 throw new FileNotFoundException($"file \"{filename}\" not exist");
             byte[] data = File.ReadAllBytes(filename);
-            if (data.Length >= 10000000)
-                throw new ArgumentOutOfRangeException("file size must be less or equal 10 mb");
+            if (data.Length >= constants.WEBHOOK_MAX_FILE_SIZE)
+                throw new ArgumentOutOfRangeException($"file size must be less or equal {constants.WEBHOOK_MAX_FILE_SIZE} mb");
             string name = Path.GetFileName(filename);
             files.Add(new file_attachment(data, name));
         }
 
         public void add_file(byte[] data, string name) {
-            if (files.Count >= 10)
-                throw new ArgumentOutOfRangeException("cannot add more than 10 files");
-            if (data.Length >= 10000000) // or 10485760?
-                throw new ArgumentOutOfRangeException("file size must be less or equal 10 mb");
+            if (files.Count >= constants.WEBHOOK_MAX_FILES)
+                throw new ArgumentOutOfRangeException($"cannot add more than {constants.WEBHOOK_MAX_FILES} files");
+            if (data.Length >= constants.WEBHOOK_MAX_FILE_SIZE)
+                throw new ArgumentOutOfRangeException($"file size must be less or equal {constants.WEBHOOK_MAX_FILE_SIZE} mb");
             files.Add(new file_attachment(data, name));
         }
 
         public void add_file(string base64, string name) {
-            if (files.Count >= 10)
-                throw new ArgumentOutOfRangeException("cannot add more than 10 files");
+            if (files.Count >= constants.WEBHOOK_MAX_FILES)
+                throw new ArgumentOutOfRangeException($"cannot add more than {constants.WEBHOOK_MAX_FILES} files");
             var data = Convert.FromBase64String(base64);
-            if (data.Length >= 10000000)
-                throw new ArgumentOutOfRangeException("file size must be less or equal 10 mb");
+            if (data.Length >= constants.WEBHOOK_MAX_FILE_SIZE)
+                throw new ArgumentOutOfRangeException($"file size must be less or equal {constants.WEBHOOK_MAX_FILE_SIZE} mb");
             files.Add(new file_attachment(data, name));
         }
 

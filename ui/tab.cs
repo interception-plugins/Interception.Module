@@ -15,7 +15,6 @@ namespace interception.ui {
         public override string name => _name;
         string _path;
         public override string path => _path;
-        window root;
 
         public tab(control _parent, short _key, ITransportConnection _tc, string _name) : base() {
             this._parent = _parent;
@@ -23,25 +22,6 @@ namespace interception.ui {
             this._tc = _tc;
             this._name = _name;
             this._path = make_path();
-            this.root = get_root_window();
-        }
-
-        public override void show(bool reliable = true) {
-            if (root != null && !root.is_spawned)
-                throw new Exception("root window is despawned");
-            EffectManager.sendUIEffectVisibility(key, tc, reliable, name, true);
-            if (on_shown != null)
-                on_shown();
-            ui_manager.trigger_on_control_shown_global(this);
-        }
-
-        public override void hide(bool reliable = true) {
-            if (root != null && !root.is_spawned)
-                throw new Exception("root window is despawned");
-            EffectManager.sendUIEffectVisibility(key, tc, reliable, name, false);
-            if (on_hidden != null)
-                on_hidden();
-            ui_manager.trigger_on_control_hidden_global(this);
         }
 
         public tab add_tab(string name) {

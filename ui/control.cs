@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using SDG.NetTransport;
+using SDG.Unturned;
 
 namespace interception.ui {
     public delegate void on_control_shown_callback();
@@ -13,8 +14,6 @@ namespace interception.ui {
         internal abstract ITransportConnection tc { get; }
         public abstract string name { get; }
         public abstract string path { get; }
-        public abstract void show(bool reliable);
-        public abstract void hide(bool reliable);
         protected virtual void on_spawn() { }
         protected virtual void on_despawn() { }
 
@@ -22,6 +21,26 @@ namespace interception.ui {
         public on_control_shown_callback on_hidden;
 
         //protected List<control> controls;
+
+        public virtual void show(bool reliable = true) {
+            var root = get_root_window();
+            if (root != null && !root.is_spawned)
+                throw new Exception("root window is despawned");
+            EffectManager.sendUIEffectVisibility(key, tc, reliable, path, true);
+            if (on_shown != null)
+                on_shown();
+            ui_manager.trigger_on_control_shown_global(this);
+        }
+
+        public virtual void hide(bool reliable = true) {
+            var root = get_root_window();
+            if (root != null && !root.is_spawned)
+                throw new Exception("root window is despawned");
+            EffectManager.sendUIEffectVisibility(key, tc, reliable, path, false);
+            if (on_hidden != null)
+                on_hidden();
+            ui_manager.trigger_on_control_hidden_global(this);
+        }
 
         protected virtual string make_path() {
             var head = this;

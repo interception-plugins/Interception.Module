@@ -1,9 +1,9 @@
 ﻿using System;
 
+using UnityEngine;
+
 using SDG.Unturned;
 using SDG.NetTransport;
-
-using interception.utils;
 
 namespace interception.ui {
     public sealed class text_progressbar : progressbar {
@@ -18,7 +18,7 @@ namespace interception.ui {
             if (root != null && !root.is_spawned)
                 throw new Exception("root window is despawned");
             int old = this.progress;
-            this.progress = math_util.clamp(progress, 0, max);
+            this.progress = Mathf.Clamp(progress, 0, max);
             EffectManager.sendUIEffectText(key, tc, reliable, path, new string(fill_char, this.progress));
             if (on_progress_changed != null)
                 on_progress_changed(old, this.progress);

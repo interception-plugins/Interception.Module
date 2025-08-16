@@ -1,13 +1,4 @@
 cron_manager.cs
 	better comparing
 
-ui
-	move show/hide methods to control.cs
-
-discord
-	get rid of add_* methods & use properties
-
-Type_ex.cs
-	change args order?
-
 documentation (ReadTheDocs)
