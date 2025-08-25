@@ -92,10 +92,15 @@
     <Compile Include="enums\e_zone_type.cs" />
     <Compile Include="extensions\Color32_ex.cs" />
     <Compile Include="extensions\Color_ex.cs" />
+    <Compile Include="extensions\DateTime_ex.cs" />
     <Compile Include="extensions\InteractableVehicle_ex.cs" />
     <Compile Include="hooks\hook.cs" />
     <Compile Include="hooks\hook_manager.cs" />
     <Compile Include="hooks\method_backup.cs" />
+    <Compile Include="random\mt19937_64.cs" />
+    <Compile Include="random\mt19937.cs" />
+    <Compile Include="random\random_number_generator.cs" />
+    <Compile Include="random\WELL512a.cs" />
     <Compile Include="serialization\types\discord\s_embed.cs" />
     <Compile Include="serialization\types\discord\s_embed_thumbnail.cs" />
     <Compile Include="serialization\types\discord\s_embed_image.cs" />
@@ -145,6 +150,9 @@
     <Compile Include="ui\text.cs" />
     <Compile Include="ui\ui_manager.cs" />
     <Compile Include="ui\window.cs" />
+    <Compile Include="utils\raycast_util.cs" />
+    <Compile Include="utils\structure_util.cs" />
+    <Compile Include="utils\barricade_util.cs" />
     <Compile Include="utils\chat_util.cs" />
     <Compile Include="utils\collider_util.cs" />
     <Compile Include="utils\input_util.cs" />

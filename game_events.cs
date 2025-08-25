@@ -15,10 +15,11 @@ using interception.ui;
 
 namespace interception {
     public delegate void on_player_teleported_global_callback(Player player, Vector3 point);
-    public delegate void on_player_seated_global_callback(Player player, Vector3 point);
+    public delegate void on_player_region_updated_global_callback(Player player, RegionCoordinate old_xy, RegionCoordinate new_xy, byte index, ref bool canIncrementIndex);
 
     public static class game_events {
         public static on_player_teleported_global_callback on_player_teleported_global;
+        public static on_player_region_updated_global_callback on_player_region_updated_global;
 
         static void on_effect_button_clicked(Player p, string b) {
             ui_manager.on_effect_button_clicked(p.channel.owner.transportConnection, b);
@@ -38,7 +39,8 @@ namespace interception {
             if (zone_manager.regions_to_check.ContainsKey(new_coords))
                 if (!zone_manager.regions_to_check[new_coords].ContainsKey(player.channel.owner.playerID.steamID.m_SteamID))
                     zone_manager.regions_to_check[new_coords].Add(player.channel.owner.playerID.steamID.m_SteamID, player);
-
+            if (on_player_region_updated_global != null)
+                on_player_region_updated_global(player, old_coords, new_coords, index, ref canIncrementIndex);
         }
 
         static void on_player_teleported(Player player, Vector3 point) {

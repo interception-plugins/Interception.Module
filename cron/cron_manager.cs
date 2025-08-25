@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using UnityEngine;
 
 namespace interception.cron {
     public delegate void on_cron_event_executed_global_callback(cron_event _event);
@@ -26,7 +22,7 @@ namespace interception.cron {
 
         internal static void tick() {
             for (int i = events.Count - 1; i >= 0; i--) {
-                if (DateTime.UtcNow.ToUniversalTime().ToString("HH:mm:ss") == events[i].execution_time.ToUniversalTime().ToString("HH:mm:ss")) { // todo better comparing
+                if (DateTime.UtcNow.TimeOfDay.CompareTo(events[i].execution_time) == 0) {
                     events[i].execute();
                     if (events[i].trigger_once)
                         pool.Remove(events[i].name);

@@ -45,7 +45,7 @@ namespace interception.discord.types {
                 throw new FileNotFoundException($"file \"{filename}\" not exist");
             byte[] data = File.ReadAllBytes(filename);
             if (data.Length >= constants.WEBHOOK_MAX_FILE_SIZE)
-                throw new ArgumentOutOfRangeException($"file size must be less or equal {constants.WEBHOOK_MAX_FILE_SIZE} mb");
+                throw new ArgumentOutOfRangeException($"file size must be less or equal {constants.WEBHOOK_MAX_FILE_SIZE / 1024 / 1024} mb");
             string name = Path.GetFileName(filename);
             files.Add(new file_attachment(data, name));
         }
@@ -54,7 +54,7 @@ namespace interception.discord.types {
             if (files.Count >= constants.WEBHOOK_MAX_FILES)
                 throw new ArgumentOutOfRangeException($"cannot add more than {constants.WEBHOOK_MAX_FILES} files");
             if (data.Length >= constants.WEBHOOK_MAX_FILE_SIZE)
-                throw new ArgumentOutOfRangeException($"file size must be less or equal {constants.WEBHOOK_MAX_FILE_SIZE} mb");
+                throw new ArgumentOutOfRangeException($"file size must be less or equal {constants.WEBHOOK_MAX_FILE_SIZE / 1024 / 1024} mb");
             files.Add(new file_attachment(data, name));
         }
 
@@ -63,7 +63,7 @@ namespace interception.discord.types {
                 throw new ArgumentOutOfRangeException($"cannot add more than {constants.WEBHOOK_MAX_FILES} files");
             var data = Convert.FromBase64String(base64);
             if (data.Length >= constants.WEBHOOK_MAX_FILE_SIZE)
-                throw new ArgumentOutOfRangeException($"file size must be less or equal {constants.WEBHOOK_MAX_FILE_SIZE} mb");
+                throw new ArgumentOutOfRangeException($"file size must be less or equal {constants.WEBHOOK_MAX_FILE_SIZE / 1024 / 1024} mb");
             files.Add(new file_attachment(data, name));
         }
 

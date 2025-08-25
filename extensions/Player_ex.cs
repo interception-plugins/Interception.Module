@@ -50,5 +50,11 @@ namespace interception.extensions {
         public static void say_to(this Player p, string text, string icon = null, bool rich_text = true) {
             ChatManager.serverSendMessage(text, Color.green, null, p.channel.owner, EChatMode.SAY, icon, rich_text);
         }
+
+        public static Vector3? get_eyes_position(this Player p, float distance, int mask = 473546752) { // 473546752 is RayMasks.BLOCK_COLLISION
+            if (!Physics.Raycast(p.look.aim.position, p.look.aim.forward, out RaycastHit hit, distance, mask) || hit.transform == null)
+                return null;
+            return hit.point;
+        }
     }
 }
